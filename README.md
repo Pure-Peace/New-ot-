@@ -1,29 +1,18 @@
-# bookprivot
+# osu!Tournament
+# 新前端
 
-## Project setup
+
+## 初始化
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 调试
 ```
 yarn run serve
 ```
 
-### Compiles and minifies for production
+### 发行
 ```
 yarn run build
 ```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
