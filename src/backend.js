@@ -22,8 +22,8 @@ $axios.interceptors.response.use(function (response) {
 
 export default {
 
-  fetchIndex () {
-    return $axios.get(`http://47.101.168.165:5002/api/pages/index`)
+  fetchRanking (page) {
+    return $axios.post(`http://47.101.168.165:5005/api/pages/elo/${page}`)
       .then(response => response.data)
   },
 

@@ -1,18 +1,28 @@
 # osu!Tournament
-# 新前端
-
-
-## 初始化
+## Project setup
 ```
 yarn install
 ```
 
-### 调试
+### Compiles and hot-reloads for development
 ```
 yarn run serve
 ```
 
-### 发行
+### Compiles and minifies for production
 ```
 yarn run build
 ```
+
+### Run your tests
+```
+yarn run test
+```
+
+### Lints and fixes files
+```
+yarn run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

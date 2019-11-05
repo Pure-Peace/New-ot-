@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="app"
-    @mousedown="(e)=>{e.preventDefault()}"
-  >
+  <div class="app">
     <a-back-top />
     <top-nav />
     <content-layout />
@@ -35,7 +32,6 @@ export default {
     font-family: "Microsoft YaHei";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
   }
   ::-webkit-scrollbar {
     width: 5px;
@@ -62,6 +58,12 @@ export default {
       box-shadow: 0 0 10px #FFEC00, 0 0 5px #FFEC00 !important;
   }
   .ant-popover-arrow {
+    display: none !important;
+  }
+  .ant-popover-inner-content {
+    padding: 0 0 !important;
+  }
+  .ant-tooltip-arrow {
     display: none !important;
   }
 </style>

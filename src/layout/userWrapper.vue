@@ -1,75 +1,26 @@
 <template>
   <div class="user-wrapper">
-    <!--div style="float: left;padding: 0 16px; margin: 0 10px;">
-      <a-input-search
-        placeholder="搜索"
-        @search="onSearch"
-      />
-    </div-->
-    <notice-bar class="act-button" />
-
-    <a-dropdown>
-      <span class="act-button ant-dropdown-link user-dropdown-menu">
-
-        <a-avatar
-          class="avatar"
-          icon="user"
-          :size="avatarSize"
-          src="https://a.ppy.sh/5084172?.jpg"
-          style="background-color: #grey; transition: .4s ease;"
-          @mousedown="(e)=>{e.preventDefault()}"
-        />
-      </span>
-
-      <a-menu
-        slot="overlay"
-        class="user-dropdown-menu-wrapper"
-        style="border-radius: 6px; max-width: 130px;"
-      >
-        <a-menu-item
-          key="0"
-          @click="()=> this.$info({
-            title: '呃',
-            content: '这个还没做',
-            onOk () {}
-          })"
-        >
-          <a-icon type="user" />
-          <span>登录</span>
-        </a-menu-item>
-        <a-menu-item key="1">
-          <a-icon type="setting" />
-          <span>测试</span>
-        </a-menu-item>
-        <a-menu-item
-          key="2"
-          disabled
-        >
-          <a-icon type="setting" />
-          <span>测试</span>
-        </a-menu-item>
-        <a-menu-divider />
-        <a-menu-item
-          key="3"
-          disabled
-          @click="handleLogout"
-        >
-          <a-icon type="logout" />
-          <span>退出登录</span>
-        </a-menu-item>
-      </a-menu>
-    </a-dropdown>
+    <notice-bar
+      :avatar-size="avatarSize"
+      class="act-button"
+    />
+    <avatar-bar
+      :avatar-size="avatarSize"
+      class="act-button"
+    />
   </div>
 </template>
 
 <script>
 import noticeBar from '@/components/noticeBar'
+import avatarBar from '@/components/avatarBar'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'UserMenu',
   components: {
-    noticeBar
+    noticeBar,
+    avatarBar
   },
   props: {
     avatarSize: {
@@ -79,12 +30,20 @@ export default {
   },
   data () {
     return {
-      username: ''
+      username: '',
+      visible: false
     }
   },
   methods: {
     ...mapActions(['Logout']),
     ...mapGetters(['nickname', 'avatar']),
+    fetchNotice () {
+      if (!this.visible) {
+
+      } else {
+      }
+      this.visible = !this.visible
+    },
     onSearch () {
       this.$info({
         title: '呃',
@@ -131,6 +90,31 @@ export default {
   }
   .act-button:hover {
     color: #E0B8CA;
-    background: rgba(0, 0, 0, 0.025);
+  }
+  .avatar{
+    box-shadow: 0 0 0 2px #F9E493;
+  }
+  .avatar:hover{
+    box-shadow: 0 0 0 3px #FFFBEA;
+  }
+  .my-menu-item {
+    border-radius: 6px;
+    margin-bottom: 3px;
+    padding: 4px 2px;
+    cursor: pointer;
+    transition: .3s ease;
+  }
+  .my-menu-item:hover {
+    background: #433939;
+  }
+</style>
+<style lang="less" scoped>
+  .header-notice{
+    display: inline-block;
+    transition: all 0.3s;
+
+    span {
+      vertical-align: initial;
+    }
   }
 </style>

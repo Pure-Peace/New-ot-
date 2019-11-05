@@ -1,9 +1,21 @@
 <template>
   <div>
-    <div
-      style="height:240px;background-size: cover;filter: blur(60px); transition: 1.5s linear;"
-      :style="'background-image: url('+ require('../assets/' + imgSet[currentIdx]) +');background-position:'+ imageX + 'px ' + imageY + 'px;'"
-    />
+    <div style="height: 240px;">
+      <div
+        style="height: 100%; background-size: cover;filter: blur(60px); transition: 1.5s linear;"
+        :style="'background-image: url('+ require('../assets/' + imgSet[currentIdx]) +');background-position:'+ imageX + 'px ' + imageY + 'px;'"
+      />
+      <div style="position: relative; top: -155px; height: 185px;">
+        <div style="position: relative; top: 60px; left: 100px;  max-width: 80%;">
+          <div style="font-size:33px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
+            Welcome to o!t
+          </div>
+          <div style="margin-left: 15px;font-size:14px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
+            —— A magical osu! tournament platform
+          </div>
+        </div>
+      </div>
+    </div>
     <div
       class="the-navbar"
       style="filter: blur(1px); z-index: 1023; background:linear-gradient(to bottom, rgba(172,57,109,0.8),rgba(172,57,109,0.4)); top: -2px; box-shadow: 0 0 1px 2px rgba(0,0,0,0);"
@@ -23,7 +35,7 @@
           style="text-align: center; line-height: 31px; transition: .4s ease;letter-spacing: 4px;"
           :style="scrollFlag === true? 'font-size: 22px;' : 'font-size: 28px;'"
         >
-          ot!
+          o!t
         </span>
       </div>
       <a-menu
@@ -101,22 +113,22 @@ export default {
         }
       }
     }, 30000)
-    setInterval(() => {
-      switch (this.towards) {
-        case 0:
-          this.imageX -= 40
-          break
-        case 1:
-          this.imageX += 40
-          break
-        case 2:
-          this.imageY -= 40
-          break
-        case 3:
-          this.imageY += 40
-          break
-      }
-    }, 1000)
+    // setInterval(() => {
+    // switch (this.towards) {
+    // case 0:
+    // this.imageX -= 40
+    // break
+    // case 1:
+    // this.imageX += 40
+    // break
+    // case 2:
+    //   this.imageY -= 40
+    //   break
+    // case 3:
+    //   this.imageY += 40
+    //   break
+    // }
+    // }, 1000)
   },
   methods: {
     jumpTo (name) {
