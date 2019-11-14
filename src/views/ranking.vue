@@ -1,9 +1,48 @@
 <template>
   <div style="padding: 10px 100px;">
-    <div style="background-color: #1E1E1E; width: 85%;padding: 24px 24px; border-radius: 14px;margin: 0 auto;">
-      <a-divider style="font-size:28px; font-weight: bold; margin: 50px auto; color: #F2F2F2;">
-        Ranking
-      </a-divider>
+    <div style="background-color: #1E1E1E; width: 85%; min-width: 620px; padding: 24px 24px; border-radius: 14px;margin: 0 auto;">
+      <div>
+        <a-divider style="font-size:28px; font-weight: bold; margin: 50px auto 0 auto; color: #F2F2F2;">
+          <span
+            class="act-button"
+            @click="draw"
+          >
+            <span>Ranking</span>
+            <a-icon
+              style="margin-left: 2px; transition: opacity .3s ease, font-size .3s ease;"
+              :style="!showSearch?'opacity:100;':'opacity:0; width: 0px; font-size: 12px;'"
+              type="search"
+            />
+          </span>
+        </a-divider>
+
+        <div
+          style="transition: .6s ease; over-flow: hidden;"
+          :style="showSearch?'opacity:100;margin: 48px 0 60px 0;':'opacity:0;margin: 20px 0 20px 0;visibility:hidden;'"
+        >
+          <div style="text-align:center;vertical-align:middle;">
+            <a-spin :spinning="searching">
+              <span style="position: relative;">
+                <input
+                  ref="searchText"
+                  size="large"
+                  class="my-input"
+                  placeholder="输入用户名或id来搜索"
+                  :style="showSearch?'':'opacity:0; height: 0;padding:0;'"
+                  @keypress.enter="handleSearch"
+                >
+                <a-icon
+                  class="act-button"
+                  style="position: absolute; top: -2px; right: 12px;  font-weight: bold;"
+                  :style="showSearch?'opacity:100; font-size: 24px;':'opacity:0; font-size: 12px;'"
+                  type="search"
+                  @click="handleSearch"
+                />
+              </span>
+            </a-spin>
+          </div>
+        </div>
+      </div>
 
       <a-table
         :columns="columns"
@@ -15,42 +54,6 @@
         :bordered="false"
         @change="handleTableChange"
       >
-        <div
-          slot="filterDropdown"
-          slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
-          class="custom-filter-dropdown"
-        >
-          <a-input
-            v-ant-ref="c => searchInput = c"
-            :placeholder="`搜索 ${column.title}`"
-            :value="selectedKeys[0]"
-            style="width: 208px; margin-bottom: 8px; display: block;"
-            @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
-            @pressEnter="() => handleSearch(selectedKeys, confirm)"
-          />
-          <a-button
-            type="primary"
-            icon="search"
-            size="medium"
-            style="width: 90px; margin-right: 8px"
-            @click="() => handleSearch(selectedKeys, confirm)"
-          >
-            搜索
-          </a-button>
-          <a-button
-            size="medium"
-            style="width: 90px"
-            @click="() => handleReset(clearFilters)"
-          >
-            重置
-          </a-button>
-        </div>
-        <a-icon
-          slot="filterIcon"
-          slot-scope="filtered"
-          type="search"
-          :style="{ color: filtered ? '#108ee9' : undefined }"
-        />
         <template
           slot="customRender"
           slot-scope="text"
@@ -70,13 +73,13 @@
           </template>
         </template>
         <template
-          slot="ranking"
-          slot-scope="ranking"
+          slot="rank"
+          slot-scope="rank"
         >
           <span
             class="ranking"
-            :style="colors[ranking]"
-          >#{{ ranking }}</span>
+            :style="colors[rank]"
+          ><span style="font-size: 14px;"># </span>{{ rank }}</span>
         </template>
         <template
           slot="username"
@@ -152,21 +155,23 @@
           slot="operation"
           slot-scope="text, record"
         >
-          <a
-            target="_blank"
-            class="this-link"
-            :href="`https://osu.ppy.sh/u/${record.user_id}`"
-          >
-            去主页
-          </a>
-          <a-divider type="vertical" />
-          <a class="this-link">
-            肛了
-          </a>
-          <a-divider type="vertical" />
-          <a class="this-link">
-            加好友
-          </a>
+          <div style="display: flex;">
+            <a
+              target="_blank"
+              class="this-link"
+              :href="`https://osu.ppy.sh/u/${record.user_id}`"
+            >
+              去主页
+            </a>
+            <span class="my-devider">|</span>
+            <a class="this-link">
+              肛了
+            </a>
+            <span class="my-devider">|</span>
+            <a class="this-link">
+              加好友
+            </a>
+          </div>
         </template>
       </a-table>
     </div>
@@ -178,10 +183,10 @@ import $backend from '../backend'
 
 const columns = [{
   title: 'Rank',
-  dataIndex: 'ranking',
-  sorter: (a, b) => a.ranking - b.ranking,
+  dataIndex: 'rank',
+  sorter: (a, b) => a.rank - b.rank,
   width: '15%',
-  scopedSlots: { customRender: 'ranking' }
+  scopedSlots: { customRender: 'rank' }
 }, {
   title: 'Avatar',
   dataIndex: 'avatar',
@@ -192,17 +197,7 @@ const columns = [{
   dataIndex: 'username',
   width: '28%',
   scopedSlots: {
-    filterDropdown: 'filterDropdown',
-    filterIcon: 'filterIcon',
-    customRender: 'username' },
-  onFilter: (value, record) => record.username.toLowerCase().includes(value.toLowerCase()),
-  onFilterDropdownVisibleChange: (visible) => {
-    if (visible) {
-      setTimeout(() => {
-        this.searchInput.focus()
-      }, 0)
-    }
-  }
+    customRender: 'username' }
 }, {
   title: 'Elo',
   dataIndex: 'elo',
@@ -220,7 +215,12 @@ export default {
   data () {
     return {
       data: [],
+      dataTemp: [],
       pagination: {},
+      pageTotal: 1,
+      showSearch: false,
+      searching: false,
+      inDraw: false,
       loading: false,
       userInfo: '',
       popovering: true,
@@ -247,16 +247,49 @@ export default {
     this.fetch()
   },
   methods: {
+    draw () {
+      if (this.inDraw !== true) {
+        this.inDraw = true
+        if (this.dataTemp.length > 0 && this.showSearch === true) {
+          this.data = this.dataTemp
+          this.pagination.total = this.pageTotal
+        }
+        this.showSearch = !this.showSearch
+        setTimeout(() => {
+          this.inDraw = false
+        }, 700)
+      }
+    },
+    handleSearch () {
+      if (this.$refs.searchText.value.length > 0) {
+        this.searching = true
+        this.loading = true
+        $backend.searchRanking(
+          this.$refs.searchText.value
+        ).then(responseData => {
+          this.dataTemp = this.data.splice(0, this.data.length)
+          this.data = responseData
+          this.searching = false
+          this.loading = false
+          this.pagination.total = responseData.length
+        }).catch(error => {
+          this.error = error.message
+          console.log(this.error)
+          this.searching = false
+          this.loading = false
+        })
+      } else {
+        this.nowPage = 1
+        this.pagination.current = 1
+        this.fetch()
+      }
+    },
     handleTableChange (pagination) {
       const pager = { ...this.pagination }
       pager.current = pagination.current
       this.pagination = pager
       this.nowPage = pager.current
       this.fetch()
-      // this.fetch({
-      // results: pagination.pageSize,
-      // page: pagination.current
-      // })
     },
     pagechange () {
 
@@ -273,9 +306,10 @@ export default {
           ary.push(responseData.data[idx])
         }
         for (let i = 0; i < ary.length; i++) {
-          ary[i].ranking = i + 1 + (this.nowPage - 1) * 30
+          ary[i].rank = i + 1 + (this.nowPage - 1) * 30
         }
-        pagination.total = responseData.total_page * 30
+        this.pageTotal = responseData.total_page * 30
+        pagination.total = this.pageTotal
         pagination.showSizeChanger = false
         pagination.pageSize = 30
         this.pagination = pagination
@@ -284,27 +318,6 @@ export default {
       }).catch(error => {
         this.error = error.message
       })
-    },
-    onSearch () {
-      const h = this.$createElement
-      this.$info({
-        title: '是这样的：',
-        content: h('div', {}, [
-          h('p', '现在不需要这个操作，'),
-          h('p', '可以直接按表头上的小放大镜按钮就可以搜索！'),
-          h('p', '可以直接按表头上的小放大镜按钮就可以搜索！')
-        ]),
-        onOk () {}
-      })
-    },
-    handleSearch (selectedKeys, confirm) {
-      confirm()
-      this.searchText = selectedKeys[0]
-    },
-
-    handleReset (clearFilters) {
-      clearFilters()
-      this.searchText = ''
     },
     popoverShow (userId) {
       this.popovering = true
@@ -353,5 +366,33 @@ export default {
   }
   .this-link:hover {
     color: #FFECF5;
+  }
+  .act-button {
+    cursor: pointer;
+    transition: all 0.3s;
+    user-select: none;
+    padding: 0;
+  }
+  .act-button:hover {
+    color: #E0B8CA;
+  }
+  .my-input {
+    transition: all .6s ease;
+    height: 50px;
+    width: 46%;
+    outline:none;
+    background: rgba(34, 34, 34, 0.1);
+    border: 2px solid rgba(204, 174, 112, 0.8);
+    border-radius: 6px;
+    padding: 10px 45px 10px 10px;
+  }
+  .my-input:hover {
+    border-color: rgba(204, 174, 112, 0.9);
+  }
+  .my-input:focus {
+    border-color: rgb(211, 179, 116);
+  }
+  .my-devider {
+     color: #CCAE70; font-weight:lighter; padding: 0 6px; user-select: none;
   }
 </style>

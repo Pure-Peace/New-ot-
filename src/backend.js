@@ -27,6 +27,26 @@ export default {
       .then(response => response.data)
   },
 
+  fetchRecentBoard () {
+    return $axios.get(`http://47.101.168.165:5005/api/pages/top`)
+      .then(response => response.data)
+  },
+
+  fetchNews () {
+    return $axios.get(`http://47.101.168.165:5005/api/pages/news`)
+      .then(response => response.data)
+  },
+
+  fetchHomeStatus () {
+    return $axios.get(`http://47.101.168.165:5005/api/pages/status`)
+      .then(response => response.data)
+  },
+
+  searchRanking (userkey) {
+    return $axios.post(`http://47.101.168.165:5005/api/users/ranking_by_username/${userkey}`)
+      .then(response => response.data)
+  },
+
   fetchUserHistory () {
     return $axios.get(`secure-resource/zzz`)
       .then(response => response.data)

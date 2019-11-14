@@ -1,12 +1,18 @@
 <template>
   <div>
-    <div style="height: 240px;">
+    <div
+      style="transition: .6s ease;"
+      :style="routeName[0]==='home'?'height: 190px;':'height: 240px;'"
+    >
       <div
         style="height: 100%; background-size: cover;filter: blur(60px); transition: 1.5s linear;"
         :style="'background-image: url('+ require('../assets/' + imgSet[currentIdx]) +');background-position:'+ imageX + 'px ' + imageY + 'px;'"
       />
-      <div style="position: relative; top: -155px; height: 185px;">
-        <div style="position: relative; top: 60px; left: 100px;  max-width: 80%;">
+      <div
+        style="position: relative; top: -155px; height: 185px; transition: .6s ease;"
+        :style="routeName[0]==='home'?'top: -120px;':''"
+      >
+        <div style="position: relative; top: 60px; left: 100px;  max-width: 80%; user-select: none;">
           <div style="font-size:33px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
             Welcome to o!t
           </div>
@@ -32,7 +38,7 @@
       >
         <span
           class="the-item"
-          style="text-align: center; line-height: 31px; transition: .4s ease;letter-spacing: 4px;"
+          style="text-align: center; line-height: 31px; transition: .4s ease;letter-spacing: 4px; user-select: none;"
           :style="scrollFlag === true? 'font-size: 22px;' : 'font-size: 28px;'"
         >
           o!t
