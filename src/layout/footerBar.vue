@@ -1,7 +1,7 @@
 <template>
   <div class="foot">
     <div
-      style="background-color: #2B2226; padding: 24px 50px; width: 100%;"
+      style="background-color: #2B2226; padding: 30px 50px; width: 100%; margin-top: 30px;"
     >
       <div
         style="text-align: center; font-size: 16px; padding: 6px 0 16px 0;"
@@ -51,6 +51,8 @@ export default {
 <style >
 .foot{
   display: flex;
+  flex: 1;
+  width: 100%;
   text-align: center;
   color: #A38F98;
   font-family: "Microsoft YaHei";

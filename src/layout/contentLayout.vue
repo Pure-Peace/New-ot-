@@ -1,5 +1,5 @@
 <template>
-  <div style="min-height: 100%; padding: 30px 0; margin-top: 10px;">
+  <div style="min-height: 100%; padding: 30px 0 0 0; margin-top: 10px;">
     <transition
       name="faded"
       mode="out-in"
@@ -13,6 +13,7 @@
 
 export default {
   components: {
+
   },
   data () {
     return {
