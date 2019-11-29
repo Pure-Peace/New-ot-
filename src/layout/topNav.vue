@@ -1,16 +1,14 @@
 <template>
   <div>
     <div
-      style="transition: .6s ease;"
-      :style="routeName[0]==='home'?'height: 190px;':'height: 240px;'"
+      style="transition: .6s ease; height: 190px;"
     >
       <div
         style="height: 100%; background-size: cover;filter: blur(60px); transition: 1.5s linear;"
         :style="'background-image: url('+ require('../assets/' + imgSet[currentIdx]) +');background-position:'+ imageX + 'px ' + imageY + 'px;'"
       />
       <div
-        style="position: relative; top: -155px; height: 185px; transition: .6s ease;"
-        :style="routeName[0]==='home'?'top: -120px;':''"
+        style="position: relative; top: -120px; height: 185px; transition: .6s ease;"
       >
         <div style="position: relative; top: 60px; left: 100px;  max-width: 80%; user-select: none;">
           <div style="font-size:33px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
@@ -24,7 +22,7 @@
     </div>
     <div
       class="the-navbar"
-      style="filter: blur(1px); z-index: 1023; background:linear-gradient(to bottom, rgba(172,57,109,0.8),rgba(172,57,109,0.4)); top: -2px; box-shadow: 0 0 1px 2px rgba(0,0,0,0);"
+      style="filter: blur(1px); z-index: 555; background:linear-gradient(to bottom, rgba(172,57,109,0.8),rgba(172,57,109,0.4)); top: -2px; box-shadow: 0 0 1px 2px rgba(0,0,0,0);"
       :style="scrollFlag === true? 'height:57px;background:linear-gradient(to bottom, rgba(172,57,109,0.95),rgba(172,57,109,0.8));' : 'height: 87px;'"
     />
     <div
@@ -52,7 +50,7 @@
         :style="scrollFlag === true? 'line-height: 52px;':'line-height: 82px; '"
       >
         <a-menu-item
-          v-for="item in routes.filter(item => item.name)"
+          v-for="item in routes.filter(item => item.show===true)"
           :key="item.name"
           style="width: 50px; padding: 0 10px; margin: 0 10px;"
           @click="jumpTo(item.name)"
@@ -168,7 +166,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1024;
+  z-index: 556;
   transition: .5s ease-in-out;
   display: flex;
   justify-content: center;

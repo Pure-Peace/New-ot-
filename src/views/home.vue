@@ -140,7 +140,7 @@
             </div>
           </div>
           <div style="position: relative;height: 210px;padding: 20px 20px;color: #DADADA;">
-            {{ announcements[ancIndex].content }}
+            {{ announcements[ancIndex].content.length>230?announcements[ancIndex].content.slice(0,230)+'...':announcements[ancIndex].content }}
             <div style="position: absolute; bottom: 30px; right: 30px;">
               <a
                 v-if="announcements[ancIndex].link"
@@ -272,8 +272,8 @@ export default {
       statusSet: undefined,
       recentBoard: {
         eloTop: {
-          name: 'MyAngelMiku',
-          elo: '2914'
+          name: 'loading',
+          elo: '_'
         },
         champion: {
           team: 'A',
@@ -281,8 +281,8 @@ export default {
           tournament: 'OCLC S4'
         },
         eloRiseTop: {
-          name: 'MyAngelMiku',
-          rise: '120'
+          name: 'loading',
+          rise: '_'
         }
       },
       cardTopColor: {

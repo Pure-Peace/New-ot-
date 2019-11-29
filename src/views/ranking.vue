@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 10px 100px;">
+  <div style="padding: 10px 100px; margin-top: 80px;">
     <div style="background-color: #1E1E1E; width: 85%; min-width: 620px; padding: 24px 24px; border-radius: 14px;margin: 0 auto;">
       <div>
         <a-divider style="font-size:28px; font-weight: bold; margin: 50px auto 0 auto; color: #F2F2F2;">
@@ -319,21 +319,21 @@ export default {
         this.error = error.message
       })
     },
-    popoverShow (userId) {
-      this.popovering = true
-      this.userInfo = ''
-      if (this.userInfos[userId] === undefined) {
-        $backend.getOsuUserData(userId).then(responseData => {
-          this.popovering = false
-          this.userInfos[userId] = responseData
-          this.userInfo = this.userInfos[userId]
-        }).catch(error => {
-          this.error = error.message
-        })
-      } else {
-        this.popovering = false
-        this.userInfo = this.userInfos[userId]
-      }
+    popoverShow (userKey) {
+    //  this.popovering = true
+    //  this.userInfo = ''
+    //  if (this.userInfos[userKey] === undefined) {
+    //    $backend.fetchUserDataApi(userKey).then(responseData => {
+    //      this.popovering = false
+    //      this.userInfos[userKey] = responseData[0]
+    //      this.userInfo = this.userInfos[userKey]
+    //    }).catch(error => {
+    //      this.error = error.message
+    //    })
+    //  } else {
+    //    this.popovering = false
+    //    this.userInfo = this.userInfos[userKey]
+    //  }
     }
   }
 }
