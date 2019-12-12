@@ -93,12 +93,13 @@ export default {
   },
   methods: {
     checkLogin () {
-      if (this.loginStatus === false || !this.token) {
+      if (!this.loginStatus && !this.token) {
         this.showMsg('error', '此操作需要登录后进行', '您必须登录后再进行此操作，页面将在3秒后跳转至首页。')
         setTimeout(() => {
           this.$router.push({ name: 'home' })
         }, 3400)
-      } else if (this.username) {
+      }
+      if (this.username) {
         this.haveInitialed = true
         this.showMsg('smile', '您已经设置过了otsu!登录信息', '您可以在此修改密码，但不可以修改登录用户名。若需修改用户名，请联系PurePeace/Explosive。')
       }
