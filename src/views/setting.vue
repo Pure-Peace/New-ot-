@@ -82,7 +82,9 @@ export default {
   data () {
     return {
       requesting: false,
-      haveInitialed: false
+      haveInitialed: false,
+      usn: undefined,
+      pwd: undefined
     }
   },
   computed: {
@@ -104,14 +106,18 @@ export default {
       }
     },
     handleSetUser () {
-      if (this.loginStatus) {
-        const username = this.$refs.username.value.trim()
-        const password = this.$refs.password.value.trim()
-        if (username.length > 1 && password.length > 7) {
+      if (this.authorize) {
+        if (this.$refs.username) {
+          this.usn = this.$refs.username.value.trim()
+        } else {
+          this.usn = 'invalidValue'
+        }
+        this.pwd = this.$refs.password.value.trim()
+        if (this.usn.length > 1 && this.pwd.length > 7) {
           const token = this.token
           const osuid = this.osuid
           this.requesting = true
-          $backend.setLoginAccount(username, password, token, osuid).then(responseData => {
+          $backend.setLoginAccount(this.usn, this.pwd, token, osuid).then(responseData => {
             this.requesting = false
             if (responseData.status === 1) {
               this.$message.success(responseData.message)
@@ -119,7 +125,7 @@ export default {
               if (responseData.info === '设置otsu!登录用户名和密码成功') {
                 this.requesting = true
                 this.showMsg('info', '成功设置otsu!登录信息', '以后您就可以使用刚才的账户直接登录otsu!啦，妈妈再也不用担心osu!官网抽风了！')
-                this.$store.commit('setUsername', username)
+                this.$store.commit('setUsername', this.usn)
                 this.requesting = true
               }
               setTimeout(() => {
