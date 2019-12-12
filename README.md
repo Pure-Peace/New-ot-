@@ -3,24 +3,19 @@
 ## 前端地址
 ```http://otsu.fun```
 
-## Project setup
+### 初始化
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### 运行
 ```
 yarn run serve
 ```
 
-### Compiles and minifies for production
+### 打包
 ```
 yarn run build
-```
-
-### Run your tests
-```
-yarn run test
 ```
 
 ## changelog
