@@ -122,9 +122,9 @@ export default {
             if (responseData.status === 1) {
               this.$message.success(responseData.message)
               this.showMsg('success', responseData.info, responseData.message)
-              if (responseData.info === '设置otsu!登录用户名和密码成功') {
+              if (responseData.info === `${!this.haveInitialed ? '设置otsu!登录用户名和' : '修改otsu!'}登录密码成功`) {
                 this.requesting = true
-                this.showMsg('info', '成功设置otsu!登录信息', '以后您就可以使用刚才的账户直接登录otsu!啦，妈妈再也不用担心osu!官网抽风了！')
+                this.showMsg('info', `成功${!this.haveInitialed ? '设置otsu!登录信息' : '修改了otsu!登录密码'}`, `以后您就可以使用刚才的${!this.haveInitialed ? '账户直接' : '密码'}登录otsu!啦，妈妈再也不用担心osu!官网抽风了！`)
                 this.$store.commit('setUsername', this.usn)
                 this.requesting = true
               }
@@ -142,8 +142,8 @@ export default {
           })
         } else {
           this.requesting = false
-          this.$message.error('用户名和密码长度不足')
-          this.showMsg('smile', '注意用户名和密码的格式！', '用户名最小长度为3位，不允许使用除了下划线和空格以外的其它特殊字符，不过中文是允许的哦。密码必须含有大写字母、小写字母和数字，而且长度至少为8位~')
+          this.$message.error(`${!this.haveInitialed ? '用户名或' : ''}密码长度不足哟~`)
+          this.showMsg('smile', `请注意${!this.haveInitialed ? '用户名和' : ''}密码的格式！`, `${!this.haveInitialed ? '用户名最小长度为3位，不允许使用除了下划线和空格以外的其它特殊字符，不过中文是允许的哦。' : ''}密码必须含有大写字母、小写字母和数字，而且长度至少为8位~`)
         }
       }
     },
