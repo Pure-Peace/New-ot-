@@ -126,7 +126,6 @@ export default {
                 this.requesting = true
                 this.showMsg('info', `成功${!this.haveInitialed ? '设置otsu!登录信息' : '修改了otsu!登录密码'}`, `以后您就可以使用刚才的${!this.haveInitialed ? '账户直接' : '密码'}登录otsu!啦，妈妈再也不用担心osu!官网抽风了！`)
                 this.$store.commit('setUsername', this.usn)
-                this.requesting = true
               }
               setTimeout(() => {
                 this.$router.push({ name: 'home' }).catch(err => { return err })
