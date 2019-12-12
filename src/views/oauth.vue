@@ -53,7 +53,7 @@ export default {
     } else {
       this.$message.warning('您已经登录了，无需再次进行信息验证')
       setTimeout(() => {
-        this.$router.push({ name: 'home' })
+        this.$router.push({ name: 'home' }).catch(err => { return err })
       }, 400)
     }
   },
@@ -145,7 +145,7 @@ export default {
         this.checkStatus(responseData)
       }
       setTimeout(() => {
-        this.$router.push({ name: this.name })
+        this.$router.push({ name: this.name }).catch(err => { return err })
       }, 3400)
     }
   }

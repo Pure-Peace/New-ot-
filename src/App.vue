@@ -28,7 +28,7 @@ export default {
       huohuo: zhCN
     }
   },
-  mounted () {
+  beforeCreate () {
     const loginString = localStorage.getItem('login')
     if (loginString) {
       // load first

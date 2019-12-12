@@ -86,20 +86,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['loginStatus', 'osuid', 'token', 'username'])
+    ...mapGetters(['loginStatus', 'osuid', 'token', 'username', 'authorize'])
   },
   mounted () {
     this.checkLogin()
   },
   methods: {
     checkLogin () {
-      if (!this.token.authorize) {
+      if (!this.authorize) {
         this.showMsg('error', '此操作需要登录后进行', '您必须登录后再进行此操作，页面将在3秒后跳转至首页。')
         setTimeout(() => {
-          this.$router.push({ name: 'home' })
+          this.$router.push({ name: 'home' }).catch(err => { return err })
         }, 3400)
-      }
-      if (this.username) {
+      } else if (this.username) {
         this.haveInitialed = true
         this.showMsg('smile', '您已经设置过了otsu!登录信息', '您可以在此修改密码，但不可以修改登录用户名。若需修改用户名，请联系PurePeace/Explosive。')
       }
@@ -124,7 +123,7 @@ export default {
                 this.requesting = true
               }
               setTimeout(() => {
-                this.$router.push({ name: 'home' })
+                this.$router.push({ name: 'home' }).catch(err => { return err })
               }, 1200)
             } else {
               this.$message.error(responseData.message)

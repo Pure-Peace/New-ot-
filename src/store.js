@@ -23,7 +23,8 @@ export default new Vuex.Store({
     loginType: state => state.login.loginType,
     token: state => state.login.authorize.token,
     tokenTime: state => state.login.authorize.timestamp,
-    tokenExpires: state => state.login.authorize.timestamp + state.authorize.expires_in
+    tokenExpires: state => state.login.authorize.timestamp + state.authorize.expires_in,
+    authorize: state => state.login.authorize
   },
   mutations: {
     userLogin (state, resp) {
