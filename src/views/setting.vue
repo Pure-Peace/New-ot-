@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     checkLogin () {
-      if (!this.loginStatus && !this.token) {
+      if (!this.token) {
         this.showMsg('error', '此操作需要登录后进行', '您必须登录后再进行此操作，页面将在3秒后跳转至首页。')
         setTimeout(() => {
           this.$router.push({ name: 'home' })
