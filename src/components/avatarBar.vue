@@ -176,7 +176,13 @@ export default {
   methods: {
     toWebLink () {
       // window.open(`${this.global.osuOAuthLink}${this.$route.name}`)
+      this.logining = true
       window.location.href = this.global.osuOAuthLink + this.$route.name
+      this.showMsg('success', '正在跳转', '即将跳转到osu!官方链接进行用户认证，请稍作等待。如果您所在网络打开osu!官网的速度较慢，等待时间会稍长。如果osu!官网抽风，有可能会打不开...届时请您重试~')
+      this.$message.success('正在打开登录链接，请稍候')
+      setTimeout(() => {
+        this.logining = false
+      }, 8000)
       // window.parent.close()
     },
     handleUserLogin () {
@@ -217,7 +223,12 @@ export default {
       this.$notification[type]({
         message: title,
         description: content,
-        placement: 'bottomRight'
+        placement: 'bottomRight',
+        duration: 7,
+        style: {
+          width: '500px',
+          marginLeft: `${335 - 500}px`
+        }
       })
     },
     resetColor () {

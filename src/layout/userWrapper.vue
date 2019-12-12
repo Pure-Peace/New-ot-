@@ -34,41 +34,7 @@ export default {
     }
   },
   methods: {
-    fetchNotice () {
-      if (!this.visible) {
 
-      } else {
-      }
-      this.visible = !this.visible
-    },
-    onSearch () {
-      this.$info({
-        title: '呃',
-        content: '这个还没做',
-        onOk () {}
-      })
-    },
-    handleLogout () {
-      const that = this
-
-      this.$confirm({
-        title: '提示',
-        content: '真的要注销登录吗 ?',
-        onOk () {
-          return that.Logout({}).then(() => {
-            window.location.reload()
-          }).catch(err => {
-            that.$message.error({
-              title: '错误',
-              description: err.message
-            })
-          })
-        },
-        onCancel () {
-
-        }
-      })
-    }
   }
 }
 </script>
