@@ -1,4 +1,8 @@
-# osu!Tournament
+# New o!t Web
+
+## 前端地址
+```http://otsu.fun```
+
 ## Project setup
 ```
 yarn install
@@ -19,10 +23,8 @@ yarn run build
 yarn run test
 ```
 
-### Lints and fixes files
-```
-yarn run lint
-```
+## changelog
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+| 日期 | 更新 |
+| :-- | :-- |
+| 2019年12月12日 | version 1.20, new update |
