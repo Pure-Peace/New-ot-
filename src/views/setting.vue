@@ -118,19 +118,20 @@ export default {
           const osuid = this.osuid
           this.requesting = true
           $backend.setLoginAccount(this.usn, this.pwd, token, osuid).then(responseData => {
-            this.requesting = false
             if (responseData.status === 1) {
               this.$message.success(responseData.message)
               this.showMsg('success', responseData.info, responseData.message)
-              if (responseData.info === `${!this.haveInitialed ? '设置otsu!登录用户名和' : '修改otsu!'}登录密码成功`) {
-                this.requesting = true
+              if (responseData.info === `设置otsu!登录用户名和密码成功`) {
                 this.showMsg('info', `成功${!this.haveInitialed ? '设置otsu!登录信息' : '修改了otsu!登录密码'}`, `以后您就可以使用刚才的${!this.haveInitialed ? '账户直接' : '密码'}登录otsu!啦，妈妈再也不用担心osu!官网抽风了！`)
                 this.$store.commit('setUsername', this.usn)
+              } else {
+                this.requesting = false
               }
               setTimeout(() => {
                 this.$router.push({ name: 'home' }).catch(err => { return err })
               }, 1200)
             } else {
+              this.requesting = false
               this.$message.error(responseData.message)
               this.showMsg('error', responseData.info, responseData.message)
             }

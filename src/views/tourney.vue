@@ -2,13 +2,46 @@
   <div style="padding: 10px 100px; margin-top: 80px;">
     <a-spin :spinning="initing">
       <div style="background-color: #1E1E1E; width: 85%; min-width: 620px; padding: 24px 24px; border-radius: 14px;margin: 0 auto;">
+        <div
+          style="display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px 30px; border-radius: 6px;"
+          :style="'border-left: 3px solid #2ECC71;'"
+        >
+          <div
+            v-for="(tValue, tKey) in tesha"
+            :key="tKey"
+            class="tourney-group-item"
+            :style="tKey!=='OCLR S3'?'border: 1px solid #41393C;':''"
+            :class="tKey!=='OCLR S3'?'non-image-item':''"
+            @click="handleSearch($event, tKey)"
+          >
+            <div style="font-size: 22px; position: absolute; z-index: 1; left: 20px; top: 15px; text-shadow: 0 1px 3px rgba(0,0,0,.75); font-weight: normal;">
+              {{ tKey }}
+            </div>
+            <div style="font-size: 14px; position: absolute; z-index: 1; right: 15px; top: 15px; text-shadow: 0 1px 3px rgba(0,0,0,.9); background-color: rgba(0,0,0,.26); padding: 3px 10px; border-radius: 16px;">
+              {{ tValue.tourneys.length }}
+            </div>
+            <div style="font-size: 12px; position: absolute; z-index: 1; left: 16px; bottom: 12px; text-shadow: 0 1px 3px rgba(0,0,0,.9); background-color: rgba(50,226,123,.43); padding: 2px 11px; border-radius: 12px;">
+              Pending
+            </div>
+            <div style="font-weight: lighter; position: absolute; z-index: 1; right: 15px; bottom: 10px; text-shadow: 0 1px 3px rgba(0,0,0,.75);">
+              <span style="font-size: 12px; ">Lastest </span> <span style="font-style: italic; font-size: 16px; ">{{ tValue.lastTime.slice(2, 10) }}</span>
+            </div>
+            <div
+              :style="tKey==='OCLR S3'?'background-image: url(http://otsu.fun/assets/oclrs3.jpg)':''"
+              class="tourney-group-image"
+            />
+          </div>
+        </div>
         <div>
-          <a-divider style="font-size:28px; font-weight: bold; margin: 50px auto 0 auto; color: #F2F2F2;">
+          <a-divider
+            id="target"
+            style="font-size:28px; font-weight: normal; margin: 50px auto 0 auto; color: #F2F2F2;"
+          >
             <span
               class="act-button"
               @click="draw"
             >
-              <span>{{ showSearch === true ? '返回' : 'Tourneys' }}</span>
+              <span>{{ !searchKey?'近期比赛': showSearch === true ? `~关闭搜索~` : '~'+searchKey }}</span>
               <a-icon
                 style="margin-left: 2px; transition: opacity .3s ease, font-size .3s ease;"
                 :style="!showSearch?'opacity:100;':'opacity:0; width: 0px; font-size: 12px;'"
@@ -406,7 +439,9 @@ export default {
       searching: false,
       inDraw: false,
       dataTemp: [],
-      idxTemp: 1
+      idxTemp: 1,
+      tesha: {},
+      searchKey: undefined
     }
   },
   mounted () {
@@ -417,10 +452,36 @@ export default {
       $backend.fetchTourneyList(
       ).then(responseData => {
         let item = responseData.sort((a, b) => { return b.match_id - a.match_id })
+        let tnyName
+        let torneyItem
+        let tesha = {}
         for (let idx = 0; idx < item.length; idx++) {
           item[idx].loading = false
           item[idx].active = false
+          tnyName = item[idx].tourney_name
+          if (!tesha[tnyName]) {
+            tesha[tnyName] = { 'tourneys': [ item[idx] ] }
+          } else {
+            tesha[tnyName].tourneys.push(item[idx])
+          }
         }
+        for (let tnyName in tesha) {
+          torneyItem = tesha[tnyName].tourneys
+          let minTime
+          let maxTime
+          for (let tidx = 0; tidx < torneyItem.length; tidx++) {
+            if (!minTime || torneyItem[tidx].time < minTime) {
+              minTime = torneyItem[tidx].time
+            }
+            if (!maxTime || torneyItem[tidx].time > maxTime) {
+              maxTime = torneyItem[tidx].time
+            }
+          }
+          tesha[tnyName].startTime = minTime
+          tesha[tnyName].lastTime = maxTime
+        }
+        this.tesha = tesha
+        console.log(this.tesha)
         this.tourneys = item
         this.initing = false
       }).catch(error => {
@@ -450,9 +511,14 @@ export default {
       let done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
       return done
     },
-    handleSearch () {
-      if (this.$refs.searchText) {
-        if (this.$refs.searchText.value.length > 0) {
+    handleSearch (e, searchKey) {
+      if (!searchKey) {
+        this.searchKey = this.$refs.searchText.value
+      } else {
+        this.searchKey = searchKey
+      }
+      if (this.searchKey) {
+        if (this.searchKey.length > 0) {
           this.searching = true
           if (this.dataTemp.length === 0) {
             this.dataTemp = this.tourneys
@@ -462,16 +528,17 @@ export default {
           let tourney
           for (let i = 0; i < this.dataTemp.length; i++) {
             tourney = this.dataTemp[i]
-            if (tourney['tourney_name'].toLowerCase().search(this.$refs.searchText.value.toLowerCase()) !== -1) {
+            if (tourney['tourney_name'].toLowerCase().search(this.searchKey.toLowerCase()) !== -1) {
               results.push(tourney)
             }
           }
           if (results.length > 0) {
             this.tourneys = results
             this.pageIdx = 1
-            this.$message.success(`为您找到${results.length}场与关键字"${this.$refs.searchText.value}"相关的比赛`)
+            this.$message.success(`为您找到${results.length}场与关键字"${this.searchKey}"相关的比赛`)
+            document.querySelector('#target').scrollIntoView({ behavior: 'smooth' })
           } else {
-            this.$message.warning(`没有找到与关键字"${this.$refs.searchText.value}"相关的结果哦~`)
+            this.$message.warning(`没有找到与关键字"${this.searchKey}"相关的结果哦~`)
           }
         } else {
           this.$message.warning('请输入搜索关键字哦~')
@@ -488,6 +555,7 @@ export default {
           this.tourneys = this.dataTemp
           this.pageIdx = this.idxTemp
           this.dataTemp = []
+          this.searchKey = undefined
         }
         this.showSearch = !this.showSearch
         setTimeout(() => {
@@ -658,5 +726,38 @@ export default {
 }
 .my-input:focus {
   border-color: rgb(211, 179, 116);
+}
+.tourney-group-item {
+  box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.04), 0 6px 6px 0 rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  position: relative;
+  background-color: #272023;
+  border-radius: 6px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  width: 320px;
+  height: 145px;
+  transition: .4s ease;
+  cursor: pointer;
+}
+.tourney-group-item:hover {
+  box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.1), 0 6px 6px 0 rgba(0, 0, 0, 0.1);
+  /*transform: translateY(-2px);*/
+
+}
+.non-image-item:hover {
+  border: 1px solid #5D5156 !important;
+}
+.tourney-group-item:hover .tourney-group-image {
+  filter: brightness(.5) blur(0px);
+}
+.tourney-group-image {
+  filter: brightness(.4) blur(0px);
+  background-position:center;
+  background-size: cover;
+  background-repeat:no-repeat;
+  width: 320px; height: 145px;
+  border-radius: 6px;
+   transition: .4s ease;
 }
 </style>
