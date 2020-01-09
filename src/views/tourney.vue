@@ -10,12 +10,12 @@
             v-for="(tValue, tKey) in tesha"
             :key="tKey"
             class="tourney-group-item"
-            :style="tKey!=='OCLR S3'?'border: 1px solid #41393C;':''"
-            :class="tKey!=='OCLR S3'?'non-image-item':''"
+            :style="tesha[tKey].acronym!=='OCLR S3'?'border: 1px solid #41393C;':''"
+            :class="tesha[tKey].acronym!=='OCLR S3'?'non-image-item':''"
             @click="handleSearch($event, tKey)"
           >
             <div style="font-size: 22px; position: absolute; z-index: 1; left: 20px; top: 15px; text-shadow: 0 1px 3px rgba(0,0,0,.75); font-weight: normal;">
-              {{ tKey }}
+              {{ tesha[tKey].acronym }}
             </div>
             <div style="font-size: 14px; position: absolute; z-index: 1; right: 15px; top: 15px; text-shadow: 0 1px 3px rgba(0,0,0,.9); background-color: rgba(0,0,0,.26); padding: 3px 10px; border-radius: 16px;">
               {{ tValue.tourneys.length }}
@@ -27,7 +27,7 @@
               <span style="font-size: 12px; ">Lastest </span> <span style="font-style: italic; font-size: 16px; ">{{ tValue.lastTime.slice(2, 10) }}</span>
             </div>
             <div
-              :style="tKey==='OCLR S3'?'background-image: url(http://otsu.fun/assets/oclrs3.jpg)':''"
+              :style="tesha[tKey].acronym==='OCLR S3'?'background-image: url(http://otsu.fun/assets/oclrs3.jpg)':''"
               class="tourney-group-image"
             />
           </div>
@@ -101,14 +101,21 @@
                           <a
                             style="margin-left: 4px; transition: .4s ease; color: #AFA6A6"
                             class="link-spn"
-                            :href="`https://osu.ppy.sh/community/matches/${item.match_id}`"
+                            @click="jumpMatches(item.match_id)"
                           >
                             比赛链接
                           </a>
                         </span>
                       </div>
-                      <div style="font-weight: lighter; color: #DADADA">
-                        {{ item.time.slice(0, 10) }}
+                      <div style="font-weight: lighter; color: #DADADA; margin-top: 5px;">
+                        {{ item.time.slice(0, 10) }} ·
+                        <a
+                          style="transition: .4s ease; color: #AFA6A6"
+                          class="link-spn"
+                          :href="`https://osu.ppy.sh/community/matches/${item.match_id}`"
+                        >
+                          mplink
+                        </a>
                       </div>
                     </div>
                     <div
@@ -193,7 +200,7 @@
                           <div
                             style="margin-right: 15px; min-width: 80px; text-align: right; font-weight: lighter;"
                           >
-                            {{ Number(gplayer.avg_acc).toFixed(2) + '%' }}
+                            {{ Number(gplayer.avg_acc*100).toFixed(2) + '%' }}
                           </div>
                         </a-tooltip>
 
@@ -219,24 +226,26 @@
                         class="match-map-info"
                       >
                         <div style="position: absolute; bottom: 0; left: 0; z-index: 1; padding: 15px 25px; font-size: 23px; text-shadow: 0 1px 3px rgba(0,0,0,.75); font-weight: lighter;">
-                          <a
-                            :href="`https://osu.ppy.sh/beatmaps/${match.map_id}`"
-                            class="turn-color-link"
-                          >
-                            <span style="font-size: 18px; font-weight: normal;">{{ match.map_artist }}</span>
-                            <span> / {{ match.map_title.slice(0,30) }}{{ match.map_title.length > 30 ? '...' : '' }} </span>
-                          </a>
+                          <a-tooltip :title="`${match.map_artist} / ${match.map_title}`">
+                            <a
+                              :href="`https://osu.ppy.sh/beatmaps/${match.map_id}`"
+                              class="turn-color-link"
+                            >
+                              <span style="font-size: 18px; font-weight: normal;">{{ match.map_artist.slice(0,26) }}{{ match.map_artist.length > 26 ? '...' : '' }}</span>
+                              <span> / {{ match.map_title.slice(0,30) }}{{ match.map_title.length > 30 ? '...' : '' }} </span>
+                            </a>
+                          </a-tooltip>
                         </div>
                         <div style="position: absolute; bottom: 0; right: 0; z-index: 1; padding: 15px 25px; font-size: 20px; text-shadow: 0 1px 3px rgba(0,0,0,.75); font-weight: lighter;">
-                          <a-tooltip :title="playing === match.map_covers.card.match(/beatmaps\/(\S*)\/covers/)[1] ? '停止播放' : '播放歌曲预览'">
+                          <a-tooltip :title="playing === match.map_covers ? '停止播放' : '播放歌曲预览'">
                             <a-icon
-                              :type="playing === match.map_covers.card.match(/beatmaps\/(\S*)\/covers/)[1] ? 'pause-circle' : 'play-circle'"
+                              :type="playing === match.map_covers ? 'pause-circle' : 'play-circle'"
                               class="turn-color-link"
                               style="text-shadow: 0 1px 3px rgba(0,0,0,.75); transition: .4s ease; cursor: pointer; font-size: 22px;"
-                              @click="audioPlay(match.map_covers.card)"
+                              @click="audioPlay(match.map_covers)"
                             />
                           </a-tooltip>
-                          Played with {{ getMainMods(match.result) }}
+                          Played with {{ match.public_mod === '' ? 'Nomod' : match.public_mod }}
                         </div>
                         <div style="position: absolute; top: 0; right: 0; z-index: 1; font-size: 16px; padding: 15px 25px; text-shadow: 0 1px 3px rgba(0,0,0,.75); font-weight: lighter;">
                           {{ match.difficulty_rating }} <a-icon type="star" />
@@ -245,7 +254,7 @@
                           开始于 {{ match.start_time }} / UTC+8
                         </div>
                         <div
-                          :style="`background: url(${match.map_covers['cover']}) center;`"
+                          :style="`background: url(https://assets.ppy.sh/beatmaps/${match.map_covers}/covers/cover.jpg?) center;`"
                           class="match-map-image"
                         />
                       </div>
@@ -464,6 +473,7 @@ export default {
           } else {
             tesha[tnyName].tourneys.push(item[idx])
           }
+          tesha[tnyName].acronym = item[idx].acronym
         }
         for (let tnyName in tesha) {
           torneyItem = tesha[tnyName].tourneys
@@ -481,7 +491,7 @@ export default {
           tesha[tnyName].lastTime = maxTime
         }
         this.tesha = tesha
-        console.log(this.tesha)
+        // console.log(this.tesha)
         this.tourneys = item
         this.initing = false
       }).catch(error => {
@@ -563,6 +573,7 @@ export default {
         }, 700)
       }
     },
+    /* old api method
     getMainMods (players) {
       let results = {}
       let real = ''
@@ -590,8 +601,10 @@ export default {
       }
       return real
     },
+    */
     audioPlay (mapCoverLink) {
-      let mapId = mapCoverLink.match(/beatmaps\/(\S*)\/covers/)[1]
+      // let mapId = mapCoverLink.match(/beatmaps\/(\S*)\/covers/)[1]
+      let mapId = mapCoverLink
       if (this.playing === mapId) {
         this.audio.pause()
         this.playing = null
@@ -601,6 +614,9 @@ export default {
         this.audio.play()
         this.audio.addEventListener('ended', () => { this.playing = null })
       }
+    },
+    jumpMatches (matchId) {
+      this.$router.push({ name: 'matchInfo', params: { matchId: matchId } })
     }
   }
 }

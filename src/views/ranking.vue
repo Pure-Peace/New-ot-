@@ -140,12 +140,12 @@
           >
             <a
               target="_blank"
-              :href="`${record.avatar}`"
+              :href="`https://a.ppy.sh/${record.user_id}?.png`"
             >
               <a-avatar
                 :size="50"
                 icon="user"
-                :src="avatar"
+                :src="`https://a.ppy.sh/${record.user_id}?.png`"
                 style="margin: 10px auto"
               />
             </a>

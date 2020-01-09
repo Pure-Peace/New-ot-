@@ -9,8 +9,16 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import smoothscroll from 'smoothscroll-polyfill'
 
+import VueSocketIO from 'vue-socket.io'
+
 import global from './global'
 import Bus from './bus'
+
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'http://localhost:8080' //
+
+}))
 
 smoothscroll.polyfill()
 Vue.prototype.global = global

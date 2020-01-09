@@ -14,9 +14,9 @@
                 style="font-size: 14px; font-weight: normal; padding: 0 5px;"
                 :style="`color: ${colorSet[idx]};`"
               >
-                {{ sts.value }}
+                {{ sts }}
               </span>
-              {{ sts.name }}
+              {{ titleSet[idx] }}
             </span>
           </span>
         </div>
@@ -74,49 +74,49 @@
     <div style="border-radius: 6px; background: #272023; padding: 15px 20px;display: flex;width: 75%; margin: 0 auto;justify-content: space-between;">
       <a-tooltip
         placement="top"
-        title="ELO总分排行top 1"
+        title="近30天ELO上升排行 [Top1]"
       >
         <div
           style="background: #272023; font-size: 24px; font-weight: lighter; padding: 20px;"
           class="the-item"
         >
           <a-icon
-            type="crown"
-            style="font-size: 28px;"
+            type="up-circle"
+            style="font-size: 24px;"
           />
           <span style="margin-left: 5px;">
-            {{ recentBoard.eloTop.name }}
+            {{ recentBoard.eloRiseTop30.username }}
           </span>
           <div style="font-size: 14px; text-align: right;">
-            {{ getNumbFormated(recentBoard.eloTop.elo) }} ELO
+            <span style="color: #FF9680;">↑</span> {{ getNumbFormated(recentBoard.eloRiseTop30.elo) }} Pt
           </div>
         </div>
       </a-tooltip>
 
       <a-tooltip
         placement="top"
-        title="近期冠军队伍"
+        title="ELO总分全国排行 [Top1]"
       >
         <div
-          style="background: #272023; font-size: 24px; font-weight: lighter; padding: 20px; text-align: center;"
+          style="background: #272023; font-size: 24px; font-weight: lighter; padding: 20px; text-align: center; min-width: 180px;"
           class="the-item"
         >
           <a-icon
-            type="trophy"
-            style="font-size: 28px;"
+            type="crown"
+            style="font-size: 30px;"
           />
           <span style="margin-left: 5px; ">
-            Team {{ recentBoard.champion.team }}: {{ recentBoard.champion.leaderName }}
+            {{ recentBoard.eloTop.username }}
           </span>
           <div style="font-size: 14px; text-align: right;">
-            {{ recentBoard.champion.tournament }} Champion
+            <span style="color: #F7F3D4;">{{ getNumbFormated(recentBoard.eloTop.elo) }}</span> ELO
           </div>
         </div>
       </a-tooltip>
 
       <a-tooltip
         placement="top"
-        title="ELO上升实力排行top 1"
+        title="总ELO上升排行 [Top1]"
       >
         <div
           style="background: #272023; font-size: 24px; font-weight: lighter; padding: 20px;"
@@ -124,13 +124,13 @@
         >
           <a-icon
             type="up"
-            style="font-size: 28px;"
+            style="font-size: 24px;"
           />
           <span style="margin-left: 5px;">
-            {{ recentBoard.eloRiseTop.name }}
+            {{ recentBoard.eloRiseTop.username }}
           </span>
           <div style="font-size: 14px; text-align: right;">
-            {{ recentBoard.eloRiseTop.rise }} Pt
+            <span style="color: #FF9680;">↑</span> {{ getNumbFormated(recentBoard.eloRiseTop.elo) }} Pt
           </div>
         </div>
       </a-tooltip>
@@ -295,17 +295,19 @@ export default {
       statusSet: undefined,
       recentBoard: {
         eloTop: {
-          name: '加载中',
-          elo: '...'
+          username: '加载中',
+          elo: '...',
+          user_id: ''
         },
-        champion: {
-          team: '...',
-          leaderName: '暂无数据',
-          tournament: '...'
+        eloRiseTop30: {
+          username: '加载中',
+          elo: '...',
+          user_id: ''
         },
         eloRiseTop: {
-          name: '加载中',
-          rise: '...'
+          username: '加载中',
+          elo: '...',
+          user_id: ''
         }
       },
       cardTopColor: {
@@ -347,9 +349,9 @@ export default {
       },
       announcements: [
         {
-          title: '服务器故障',
-          type: '信息',
-          content: '如果您看到了本条消息，说明服务器后端接口出现故障，请您等待恢复，谢谢',
+          title: '哈哈',
+          type: '公告',
+          content: '暂时啥也没哦',
           datetime: '现在',
           cover: '',
           link: null
@@ -373,11 +375,16 @@ export default {
           link: null
         }
       ],
-      colorSet: [
-        '#EA5197',
-        '#3498DB',
-        '#2ECC71'
-      ],
+      colorSet: {
+        player_count: '#EA5197',
+        match_count: '#3498DB',
+        tourney_count: '#2ECC71'
+      },
+      titleSet: {
+        player_count: 'ELO玩家总数',
+        match_count: '比赛总场次',
+        tourney_count: '进行中的比赛'
+      },
       tournaments: [
         {
           title: 'OCLB S10',
@@ -442,7 +449,7 @@ export default {
   mounted () {
     this.getHomeStatus()
     this.getRecentBoard()
-    this.getNews()
+    // this.getNews()
   },
   methods: {
     openLoginLink () {
@@ -483,11 +490,6 @@ export default {
     getRecentBoard () {
       $backend.fetchRecentBoard(
       ).then(res => {
-        res.champion = {
-          team: 'X',
-          leaderName: '暂无数据',
-          tournament: '!!'
-        }
         this.recentBoard = res
       }).catch(error => {
         this.error = error.message

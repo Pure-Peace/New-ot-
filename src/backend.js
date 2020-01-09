@@ -26,12 +26,12 @@ const otsuApi = 'http://otsu.fun:9529'
 
 export default {
   fetchRanking (page) {
-    return $axios.get(`${eloApi}/pages/elo/${page}`)
+    return $axios.get(`${eloApi}/pages/eloRanking/${page}`)
       .then(response => response.data)
   },
 
   fetchRecentBoard () {
-    return $axios.get(`${eloApi}/pages/top`)
+    return $axios.get(`${eloApi}/pages/topPlayer`)
       .then(response => response.data)
   },
 
@@ -46,17 +46,11 @@ export default {
   },
 
   fetchHomeStatus () {
-    return $axios.get(`${eloApi}/pages/status`)
+    return $axios.get(`${eloApi}/pages/count`)
       .then(response => response.data)
   },
-
   searchRanking (userkey) {
     return $axios.get(`${eloApi}/users/ranking_by_username/${userkey}`)
-      .then(response => response.data)
-  },
-
-  fetchUserHistory () {
-    return $axios.get(`secure-resource/zzz`)
       .then(response => response.data)
   },
   fetchUserDataApi (userKey) {
@@ -64,15 +58,11 @@ export default {
       .then(response => response.data)
   },
   fetchTourneyList () {
-    return $axios.get(`${eloApi}/pages/tourney`)
+    return $axios.get(`${eloApi}/matches`)
       .then(response => response.data)
   },
   fetchMatchInfo (matchId) {
     return $axios.get(`${eloApi}/matches/${matchId}`)
-      .then(response => response.data)
-  },
-  fetchMapInfo (mapId) {
-    return $axios.get(`${eloApi}/matches/map/${mapId}`)
       .then(response => response.data)
   },
   loginByOsuAuth (osuUserAuthCode) {
@@ -89,6 +79,14 @@ export default {
   },
   loginStatusChecker (token, osuid) {
     return $axios.post(`${otsuApi}/loginStatusChecker`, { }, { headers: { 'X-OtsuToken': token, 'Osuid': osuid } })
+      .then(response => response.data)
+  },
+  eloGetUserByOsuName (username) {
+    return $axios.get(`${eloApi}/users/ranking_by_username/${username}`)
+      .then(response => response.data)
+  },
+  eloGetUserByOsuId (osuid) {
+    return $axios.get(`${eloApi}/users/ranking_by_user_id/${osuid}`)
       .then(response => response.data)
   }
 }
