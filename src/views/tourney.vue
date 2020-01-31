@@ -3,7 +3,7 @@
     <a-spin :spinning="initing">
       <div style="background-color: #1E1E1E; width: 85%; min-width: 620px; padding: 24px 24px; border-radius: 14px;margin: 0 auto;">
         <div
-          style="display: flex; flex-wrap: wrap; justify-content: space-between; padding: 20px 30px; border-radius: 6px;"
+          style="display: flex; flex-wrap: wrap; padding: 20px 30px; border-radius: 6px;"
           :style="'border-left: 3px solid #2ECC71;'"
         >
           <div

@@ -12,12 +12,28 @@
       >
         <div style="position: relative; top: 60px; left: 100px;  max-width: 80%; user-select: none;">
           <div style="font-size:33px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
-            Welcome to o!t
+            Welcome to o!t~
+            <span style="margin: 0 10px;font-size:16px;">/</span>
+            <span style="font-size: 24px; font-weight: bold;"> {{ ff.find(item=>item.name===routeName[0]).title }}</span>
+            <span style="font-size: 12px; margin: 0 8px;">{{ routeName[0] }}</span>
           </div>
           <div style="margin-left: 15px;font-size:14px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
-            —— A magical osu! tournament platform
+            —— A magical osu! tournament platform.
           </div>
         </div>
+        <transition
+          name="faded"
+          mode="out-in"
+        >
+          <div
+            v-if="routeName[0]==='lobby'"
+            style="position: absolute; top: 60px; right: 250px; width: 300px; height: 100px; border-radius: 8px; padding: 12px;"
+          >
+            <div style="font-size:33px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
+              <span style="background-color:green; width: 40px; height: 40px; display: inline-block;" />{{ socketioStatus===true?'已连接':'已断开' }}
+            </div>
+          </div>
+        </transition>
       </div>
     </div>
     <div
@@ -46,16 +62,24 @@
         v-model="routeName"
         theme="light"
         mode="horizontal"
-        style="border:0px !important; background:rgba(255,255,255,0); font-size: 14px; font-weight: 500; transition: .4s ease;"
+        style="border:0px !important; background:rgba(255,255,255,0); font-size: 14px; font-weight: 500; transition: .4s ease; margin-right: 20px;"
         :style="scrollFlag === true? 'line-height: 52px;':'line-height: 82px; '"
       >
         <a-menu-item
-          v-for="item in routes.filter(item => item.show===true)"
+          v-for="item in gg"
           :key="item.name"
-          style="width: 50px; padding: 0 10px; margin: 0 10px;"
+          style="padding: 0 10px; margin: 0 10px; text-align: center;"
+          :style="item.icon?'width: 70px; padding-left: 5px;':'width: 50px; '"
           @click="jumpTo(item.name)"
         >
-          {{ item.title }}
+          <span>
+            <a-icon
+              v-if="item.icon"
+              :type="item.icon"
+              style="margin-right: 1px; font-size: 16px;"
+            />
+            {{ item.title }}
+          </span>
         </a-menu-item>
       </a-menu>
       <user-wrapper :avatar-size="scrollFlag === true? 38 : 64" />
@@ -67,6 +91,7 @@
 import userWrapper from './userWrapper'
 import routes from '../routes'
 import Bus from '@/bus'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -75,7 +100,8 @@ export default {
   data () {
     return {
       scrollFlag: false,
-      routes: routes,
+      ff: routes,
+      gg: routes.filter(item => item.show === true),
       routeName: this.global.routeName ? this.global.routeName : this.routeName,
       imageX: 80,
       imageY: 800,
@@ -85,6 +111,9 @@ export default {
       imgSet: this.global.topNavImgSet,
       towards: Math.floor(Math.random() * 4)
     }
+  },
+  computed: {
+    ...mapGetters(['socketioStatus'])
   },
   beforeCreate () {
     Bus.$on('navChange', (routeName) => {
@@ -161,6 +190,11 @@ export default {
 </script>
 
 <style>
+@media screen and (max-width: 1150px) {
+  .the-navbar {
+    overflow: auto;
+  }
+}
 .the-navbar {
   position: fixed;
   top: 0;

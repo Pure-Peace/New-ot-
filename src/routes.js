@@ -8,6 +8,8 @@ import matches from '@/views/matches'
 import matchInfo from '@/views/matchInfo'
 import users from '@/views/users'
 import lobby from '@/views/lobby'
+import compass from '@/views/compass'
+import cost from '@/views/cost'
 
 export default [
   {
@@ -39,44 +41,59 @@ export default [
     component: lobby
   },
   {
+    path: '/cost',
+    name: 'cost',
+    title: 'Cost 计算器',
+    show: false,
+    component: cost
+  },
+  {
     path: '/wiki',
     name: 'wiki',
-    title: 'wiki',
-    show: true,
+    title: '百科',
+    show: false,
     component: wiki
+  },
+  {
+    path: '/compass',
+    name: 'compass',
+    title: '罗盘',
+    show: true,
+    icon: 'dashboard',
+    component: compass
   },
   {
     path: '/oauth',
     name: 'oauth',
-    title: 'oauth',
+    title: '授权验证',
     show: false,
     component: oauth
   },
   {
     path: '/matches/',
     name: 'matches',
-    title: 'matches',
+    title: '对局查找',
     show: false,
     component: matches
   },
   {
     path: '/matches/:matchId',
     name: 'matchInfo',
-    title: 'matchInfo',
+    title: '对局信息',
     show: false,
     component: matchInfo
   },
   {
     path: '/account/setting',
     name: 'setting',
-    title: 'setting',
+    title: '账号设置',
     show: false,
     component: setting
   },
   {
     path: '/users/:userKey',
     name: 'userPage',
-    title: 'userPage',
+    title: '用户页面',
     show: false,
     component: users
   },

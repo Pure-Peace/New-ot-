@@ -78,7 +78,7 @@ export default {
       .then(response => response.data)
   },
   loginStatusChecker (token, osuid) {
-    return $axios.post(`${otsuApi}/loginStatusChecker`, { }, { headers: { 'X-OtsuToken': token, 'Osuid': osuid } })
+    return $axios.post(`${otsuApi}/loginStatusChecker`, {}, { headers: { 'X-OtsuToken': token, 'Osuid': osuid } })
       .then(response => response.data)
   },
   eloGetUserByOsuName (username) {
@@ -87,6 +87,18 @@ export default {
   },
   eloGetUserByOsuId (osuid) {
     return $axios.get(`${eloApi}/users/ranking_by_user_id/${osuid}`)
+      .then(response => response.data)
+  },
+  getCostFormulas (token, osuid) {
+    var headers = {}
+    if (token && token.length > 1 && osuid && osuid.length > 1) {
+      headers = { headers: { 'X-OtsuToken': token, 'Osuid': osuid } }
+    }
+    return $axios.post(`${otsuApi}/costFormulaGet`, {}, headers)
+      .then(response => response.data)
+  },
+  costCalculator (data) {
+    return $axios.post(`${otsuApi}/costCalculator`, data)
       .then(response => response.data)
   }
 }

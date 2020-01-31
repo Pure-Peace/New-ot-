@@ -44,6 +44,7 @@ export default {
           this.$store.commit('setStateLogin', loginData)
         } else if (responseData.status === -1 || responseData.info === '登录验证失败') {
           this.$store.commit('userLogout')
+          this.$socket.disconnect()
           this.$message.warning('登录信息过期惹，需要重新登录哦')
           this.showMsg('info', '登录信息过期啦，请重新登录~', '出现这种情况的原因可能有三种：1、登录令牌过期，2、otsu!后端验证服务器关闭，3、登录信息被人为清除')
         }
@@ -84,9 +85,28 @@ export default {
 <style>
   .app {
     height: 100vh;
+    min-height: 1080px;
+    min-width: 1500px;
     font-family: "Microsoft YaHei";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  input::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #bfbfbf;
+  }
+  input:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #bfbfbf;
+  }
+  input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #bfbfbf;
+  }
+  input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #bfbfbf;
   }
   ::-webkit-scrollbar {
     width: 5px;
@@ -121,4 +141,5 @@ export default {
   .ant-tooltip-arrow {
     display: none !important;
   }
+
 </style>

@@ -45,7 +45,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['loginStatus', 'username'])
+    ...mapGetters(['loginStatus', 'username', 'osuid', 'token'])
   },
   mounted () {
     if (this.loginStatus !== true) {
@@ -108,6 +108,8 @@ export default {
       }
       if (responseData.status === 1) {
         this.$store.commit('userLogin', responseData)
+        this.$socket.io.opts.query = { 'otsu_token': this.token, 'osuid': this.osuid }
+        this.$socket.connect()
         this.showMsg('success', '\\*^o^*//用osu!账户登录成功啦', `${responseData.data.userInfo.osuname}酱，欢迎来到o!t~`)
         if (!responseData.data.userInfo.username) {
           this.name = 'setting'

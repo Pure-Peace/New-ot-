@@ -14,11 +14,35 @@ import VueSocketIO from 'vue-socket.io'
 import global from './global'
 import Bus from './bus'
 
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: 'http://localhost:8080' //
+var loginData = JSON.parse(localStorage.getItem('login'))
+var token
+var osuid
 
-}))
+if (loginData && loginData.authorize && loginData.user) {
+  token = loginData.authorize.token
+  osuid = loginData.user.osuid
+}
+
+let vueSocketIo = new VueSocketIO({
+  debug: true,
+  connection: 'http://otsu.fun:9530/test',
+  options: {
+    query: {
+      'otsu_token': token,
+      'osuid': osuid
+    }
+  }
+})
+
+vueSocketIo.io.on('connect', () => {
+  store.commit('setSocketioStatus', true)
+})
+
+vueSocketIo.io.on('disconnect', () => {
+  store.commit('setSocketioStatus', false)
+})
+
+Vue.use(vueSocketIo)
 
 smoothscroll.polyfill()
 Vue.prototype.global = global

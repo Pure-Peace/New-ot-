@@ -36,7 +36,6 @@ export default {
 
       ).then(responseData => {
         this.wiki = responseData
-        console.log(this.wiki)
       }).catch(error => {
         console.log(error.message)
       })

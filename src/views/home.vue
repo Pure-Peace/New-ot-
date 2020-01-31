@@ -383,7 +383,7 @@ export default {
       titleSet: {
         player_count: 'ELO玩家总数',
         match_count: '比赛总场次',
-        tourney_count: '进行中的比赛'
+        tourney_count: '记忆中的比赛'
       },
       tournaments: [
         {
@@ -510,7 +510,7 @@ export default {
 </script>
 
 <style>
-  @media screen and (max-width: 1150px) {
+  /*@media screen and (max-width: 1150px) {
     .intro-right {
       display: none;
     }
@@ -521,7 +521,7 @@ export default {
     .intro-container {
       height: auto !important;
     }
-  }
+  }*/
   .intro-left {
     height: 100%;
     width: 60%;

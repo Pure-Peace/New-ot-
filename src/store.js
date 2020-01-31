@@ -12,6 +12,10 @@ export default new Vuex.Store({
       time: undefined,
       info: undefined,
       type: undefined
+    },
+    socketio: {
+      status: false,
+      connid: undefined
     }
   },
   getters: {
@@ -24,7 +28,8 @@ export default new Vuex.Store({
     token: state => state.login.authorize.token,
     tokenTime: state => state.login.authorize.timestamp,
     tokenExpires: state => state.login.authorize.timestamp + state.authorize.expires_in,
-    authorize: state => state.login.authorize
+    authorize: state => state.login.authorize,
+    socketioStatus: state => state.socketio.status
   },
   mutations: {
     userLogin (state, resp) {
@@ -56,6 +61,9 @@ export default new Vuex.Store({
     setUsername (state, username) {
       state.login.user.username = username
       localStorage.setItem('login', JSON.stringify(state.login))
+    },
+    setSocketioStatus (state, status) {
+      state.socketio.status = status
     }
   },
   actions: {

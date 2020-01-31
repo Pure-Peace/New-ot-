@@ -59,7 +59,15 @@ export default {
     jumpToMatches () {
       if (this.$refs.mplink && this.$refs.mplink.value) {
         const matchId = this.$refs.mplink.value.replace(/[^0-9]/ig, '')
-        this.$router.push({ name: 'matchInfo', params: { matchId: matchId } })
+        if (matchId === '') {
+          this.$message.warning('OxO 请输入一点东西吧...')
+          this.warning = true
+          setTimeout(() => {
+            this.warning = false
+          }, 2400)
+        } else {
+          this.$router.push({ name: 'matchInfo', params: { matchId: matchId } })
+        }
       } else {
         this.$message.warning('OxO 请输入一点东西吧...')
         this.warning = true

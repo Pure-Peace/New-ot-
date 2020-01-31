@@ -163,7 +163,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['loginStatus', 'osuname', 'osuid', 'username'])
+    ...mapGetters(['loginStatus', 'osuname', 'osuid', 'username', 'token'])
   },
   watch: {
     avatarSize () {
@@ -197,6 +197,8 @@ export default {
             this.logining = false
             this.color = '#2ECC71'
             this.$store.commit('userLogin', responseData)
+            this.$socket.io.opts.query = { 'otsu_token': this.token, 'osuid': this.osuid }
+            this.$socket.connect()
             this.visible = false
             this.showMsg('success', '\\*^o^*//登录成功啦', `${responseData.data.userInfo.osuname}酱，欢迎来到o!t~`)
           } else if (responseData.status === -1) {
@@ -244,6 +246,7 @@ export default {
         content: '(๑•ᴗ•๑)♡ 按下确定就可以退出了哦！',
         onOk () {
           that.$store.commit('userLogout')
+          that.$socket.disconnect()
           that.$message.success('您已登出成功啦，欢迎下次再来！')
         },
         onCancel () {}
