@@ -149,7 +149,7 @@
       <div style="display: flex;height:100%;">
         <div style="background-color: rgba(39, 32, 35, 0.8);width:100%;border-radius: 6px 0 0 6px; padding: 0 0;">
           <div
-            style="position:relative;box-shadow: 4px -2px 4px #1D1D1D;border-radius: 6px 0 0 0;user-select: none;width: 900px;height: 220px;background-repeat: no-repeat;background-position: center;background-size: cover;overflow: hidden;"
+            style="position:relative;box-shadow: 4px -2px 4px #1D1D1D;border-radius: 6px 0 0 0;user-select: none;height: 220px;background-repeat: no-repeat;background-position: center;background-size: cover;overflow: hidden;"
             :style="'background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)), url('+ require('../assets/cover.jpg') +');'"
           >
             <div style="text-shadow: 0 0px 3px #000000;;padding: 25px 0 0 30px; font-size: 22px; font-weight: lighter;">
@@ -172,7 +172,7 @@
             </div>
           </div>
         </div>
-        <div style="position:relative; box-shadow: -1px 0 4px #1D1D1D;padding: 20px 40px 0 40px; background-color: #2A2427; border-radius: 0 6px 6px 0;flex-flow: column; display: flex;align-items: flex-end;justify-content: center;">
+        <div style="width: 58%; position:relative; box-shadow: -1px 0 4px #1D1D1D;padding: 20px 40px 0 40px; background-color: #2A2427; border-radius: 0 6px 6px 0;flex-flow: column; display: flex;align-items: flex-end;justify-content: center;">
           <div style="position: absolute; right: 20px; top: 20px; color: #E0E0E0; font-size: 14px; font-weight: lighter;">
             {{ ancIndex + 1 }} / {{ announcements.length }}
           </div>
@@ -211,15 +211,15 @@
       </div>
     </div>
 
-    <div style="display: flex; flex-flow:row wrap; justify-content: center; margin: 0 auto; width: 75%;">
+    <div style="display: flex; flex-flow:row wrap; justify-content: center; margin: 0 auto; width: 1200px;">
       <div
         v-for="(tou,idx) in tournaments"
         :key="idx"
         class="my-card"
-        :style="'border-top: 5px solid' + cardTopColor[tou.status.name] + '!important;'"
+        :style="`border-top: 5px solid ${cardTopColor[tou.status.name]} !important; ${idx%3 === 0?'margin-left: 0;':''}`"
       >
         <div style="font-size: 22px; padding: 15px 20px; min-height: 63px; color: #EEEEEE;">
-          {{ tou.title }}
+          {{ tou.title }} {{ idx }}
         </div>
         <div
           class="my-card-image"
@@ -649,7 +649,7 @@ export default {
     font-weight:lighter;
     cursor: pointer;
     user-select:none;
-    width: 450px;
+    width: 100%;
     height: 50px;
     line-height:30px;
     padding: 10px 12px;

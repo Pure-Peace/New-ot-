@@ -24,7 +24,7 @@ if (loginData && loginData.authorize && loginData.user) {
 }
 
 let vueSocketIo = new VueSocketIO({
-  debug: true,
+  debug: false,
   connection: 'http://otsu.fun:9530/test',
   options: {
     query: {

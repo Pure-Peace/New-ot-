@@ -27,10 +27,14 @@
         >
           <div
             v-if="routeName[0]==='lobby'"
-            style="position: absolute; top: 60px; right: 250px; width: 300px; height: 100px; border-radius: 8px; padding: 12px;"
+            style="position: absolute; top: 60px; right: 400px;  height: 100px; border-radius: 8px; padding: 12px; user-select: none;"
           >
-            <div style="font-size:33px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A;">
-              <span style="background-color:green; width: 40px; height: 40px; display: inline-block;" />{{ socketioStatus===true?'已连接':'已断开' }}
+            <div style="font-size: 33px;font-weight:bold;color:#FFFFFF;text-shadow: 0 1px 6px #2A2A2A; background-color: rgba(0,0,0,.1); border-radius: 6px; padding: 8px;">
+              <a-icon
+                :type="socketioStatus===true?'thunderbolt':'api'"
+                style="padding-left: 5px;"
+              />
+              <span style="padding: 5px;">{{ socketioStatus===true?'已连接':'已断开' }}</span>
             </div>
           </div>
         </transition>
@@ -46,6 +50,7 @@
       :style="scrollFlag === true? 'height:55px;background:linear-gradient(to bottom, rgba(172,57,109,0.9),rgba(172,57,109,0.5));' : 'height: 85px;'"
     >
       <div
+        class="logo"
         style="transition: .4s ease;"
         :style="scrollFlag === true? 'margin-right: 50px;' : 'margin-right: 200px;'"
         @click="jumpTo('home')"
@@ -191,8 +196,8 @@ export default {
 
 <style>
 @media screen and (max-width: 1150px) {
-  .the-navbar {
-    overflow: auto;
+  .logo {
+    display: none;
   }
 }
 .the-navbar {

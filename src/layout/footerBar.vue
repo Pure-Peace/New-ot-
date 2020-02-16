@@ -18,7 +18,21 @@
         </span>
       </div>
       <div style="padding: 18px 0 0 0;">
-        PurePeace, Explosive powered 2019
+        <a
+          style="color: #A38F98;"
+          href="https://osu.ppy.sh/users/5084172"
+        >
+          PurePeace</a>,
+        <a
+          style="color: #A38F98;"
+          href="https://osu.ppy.sh/users/245276"
+        >
+          Explosive
+        </a>
+        powered 2020 ·  <a
+          style="color: #A38F98;"
+          href="http://www.beian.miit.gov.cn"
+        >粤ICP备18079952号</a>
       </div>
     </div>
   </div>

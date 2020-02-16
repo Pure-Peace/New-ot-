@@ -141,7 +141,7 @@
                     <div style="display: flex; justify-content:center; flex-wrap: wrap;">
                       <div
                         class="match-player-info"
-                        style="margin-bottom: 10px; font-size: 12px; font-weight: bold; color: #E7E0E0; text-align: right; border-left: 4px solid #AEA1A1 !important; border-radius: 6px; min-width: 1000px; padding: 20px 40px; margin-bottom: 5px;"
+                        style="margin-bottom: 10px; font-size: 12px; font-weight: bold; color: #E7E0E0; text-align: right; border-left: 4px solid #AEA1A1 !important; border-radius: 6px; min-width: 860px; padding: 20px 40px; margin-bottom: 5px;"
                       >
                         <span style="width: 270px;" />
                         <span style="min-width: 100px;">全局输出</span>
@@ -153,7 +153,7 @@
                         v-for="(gplayer, gplayerIdx) in matchInfo[item.match_id].damage.sort((a, b)=> { return b.total_damage - a.total_damage })"
                         :key="gplayerIdx"
                         class="match-player-info"
-                        style="border-left: 4px solid #28B463 !important; border-radius: 6px; min-width: 1000px; padding: 15px 40px; margin-bottom: 5px;"
+                        style="border-left: 4px solid #28B463 !important; border-radius: 6px; min-width: 860px; padding: 15px 40px; margin-bottom: 5px;"
                       >
                         <a-avatar
                           icon="user"
@@ -270,7 +270,7 @@
                             :id="`team-${color}-${pIdx+1}`"
                             :key="pIdx"
                             class="match-player-info"
-                            :style="player.team_color === 'blue' ? 'border-left: 4px solid #3498DB !important; border-radius: 6px 0 0 6px;' : player.team_color === 'red' ? 'border-right: 4px solid #BB1177 !important; border-radius: 0 6px 6px 0' : 'border-left: 4px solid #28B463 !important; border-radius: 6px; min-width: 1000px; padding: 20px 40px;'"
+                            :style="player.team_color === 'blue' ? 'border-left: 4px solid #3498DB !important; border-radius: 6px 0 0 6px;' : player.team_color === 'red' ? 'border-right: 4px solid #BB1177 !important; border-radius: 0 6px 6px 0' : 'border-left: 4px solid #28B463 !important; border-radius: 6px; min-width: 860px; padding: 20px 40px;'"
                           >
                             <!--蓝队&solo-->
                             <a-avatar
@@ -677,6 +677,7 @@ export default {
   background: transparent;
   margin: 30px auto;
   width: 70%;
+  min-width: 780px;
 }
 
 .match-map-info:hover .match-map-image {
