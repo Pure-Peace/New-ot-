@@ -1,4 +1,5 @@
 import home from '@/views/home'
+import results from '@/views/results'
 import tourney from '@/views/tourney'
 import ranking from '@/views/ranking'
 import wiki from '@/views/wiki'
@@ -18,6 +19,13 @@ export default [
     title: '主页',
     show: true,
     component: home
+  },
+  {
+    path: '/results',
+    name: 'results',
+    title: '战报',
+    show: true,
+    component: results
   },
   {
     path: '/tourney',

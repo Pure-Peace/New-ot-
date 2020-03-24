@@ -100,5 +100,13 @@ export default {
   costCalculator (data) {
     return $axios.post(`${otsuApi}/costCalculator`, data)
       .then(response => response.data)
+  },
+  getEwc () {
+    return $axios.get(`${eloApi}/tourney/ewc`)
+      .then(response => response.data)
+  },
+  getMappool (tourneyName) {
+    return $axios.get(`${eloApi}/mappool/mplist/${tourneyName}`)
+      .then(response => response.data)
   }
 }
