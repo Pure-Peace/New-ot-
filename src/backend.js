@@ -1,27 +1,8 @@
-import axios from 'axios'
-
-let $axios = axios.create({
-  timeout: 17000,
-  headers: { 'Content-Type': 'application/json' }
-})
-
-// Request Interceptor
-$axios.interceptors.request.use(function (config) {
-  // config.headers['Authorization'] = 'Fake Token'
-  return config
-})
-
-// Response Interceptor to handle and log errors
-$axios.interceptors.response.use(function (response) {
-  return response
-}, function (error) {
-  // Handle Error
-  console.log(error)
-  return Promise.reject(error)
-})
+import $axios from './requester'
 
 const eloApi = 'http://api.osuwiki.cn:5005/api'
 const otsuApi = 'http://otsu.fun:9529'
+const mappoolApi = 'http://47.101.168.165:5004'
 // const otsuApi = 'http://localhost:9529' // dev
 
 export default {
@@ -108,5 +89,10 @@ export default {
   getMappool (tourneyName) {
     return $axios.get(`${eloApi}/mappool/mplist/${tourneyName}`)
       .then(response => response.data)
+  },
+  test1 () {
+    return $axios.get(`${mappoolApi}/pools`)
+      .then(response => response.data)
   }
+
 }

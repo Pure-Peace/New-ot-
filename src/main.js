@@ -15,12 +15,12 @@ import global from './global'
 import Bus from './bus'
 
 var loginData = JSON.parse(localStorage.getItem('login'))
-var token
-var osuid
+var token = ''
+var osuid = ''
 
 if (loginData && loginData.authorize && loginData.user) {
-  token = loginData.authorize.token
-  osuid = loginData.user.osuid
+  token = loginData.authorize.token || ''
+  osuid = loginData.user.osuid || ''
 }
 
 let vueSocketIo = new VueSocketIO({

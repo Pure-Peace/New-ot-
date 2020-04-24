@@ -18,8 +18,8 @@
             </div>
             <div style="background-color: red; padding: 20px; margin: 20px; cursor: pointer;">
               <div
-                v-for="map in mappool"
-                :key="map"
+                v-for="(map, idx) in mappool"
+                :key="idx"
                 style="background-color: blue; padding: 20px; margin: 20px; "
               >
                 {{ map.mappool_name }}
@@ -46,28 +46,21 @@ export default {
     this.fetchEwc()
   },
   methods: {
-    fetchEwc () {
-      $backend.getEwc().then(res => {
-        let ewc = res
-        let mappool = res.map((tourneyName) => {
-          return $backend.getMappool(
+    async fetchEwc () {
+      const ewc = await $backend.getEwc()
+      const mappool = await Promise.all(
+        ewc.map(async tourneyName =>
+          $backend.getMappool(
             tourneyName
-          ).then(res).catch(error => {
+          ).catch(error => {
             console.log(error)
           })
-        })
-        Promise.all(mappool).then(res => {
-          let obj = {}
-          ewc.map((v, i) => {
-            obj[ewc[i]] = res[i]
-          })
-          this.ewc = obj
-        }).catch(error => {
-          console.log(error)
-        })
-      }).catch(error => {
-        console.log(error)
-      })
+        ).filter(pool => pool)
+      )
+      this.ewc = ewc.reduce((re, tour, idx) => {
+        re[tour] = mappool[idx]
+        return re
+      }, {})
     }
   }
 }

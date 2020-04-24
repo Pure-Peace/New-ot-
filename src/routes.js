@@ -1,5 +1,7 @@
 import home from '@/views/home'
 import results from '@/views/results'
+import mappool from '@/views/mappool'
+import poolDetail from '@/views/poolDetail'
 import tourney from '@/views/tourney'
 import ranking from '@/views/ranking'
 import wiki from '@/views/wiki'
@@ -28,10 +30,24 @@ export default [
     component: results
   },
   {
+    path: '/mappool',
+    name: 'mappool',
+    title: '图池',
+    show: true,
+    component: mappool
+  },
+  {
+    path: '/poolDetail/:poolName',
+    name: 'poolDetail',
+    title: '图池详情',
+    show: false,
+    component: poolDetail
+  },
+  {
     path: '/tourney',
     name: 'tourney',
     title: '比赛',
-    show: true,
+    show: false,
     component: tourney
   },
   {
@@ -45,7 +61,7 @@ export default [
     path: '/lobby',
     name: 'lobby',
     title: '大厅',
-    show: true,
+    show: false,
     component: lobby
   },
   {
