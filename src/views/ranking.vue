@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import $backend from '../backend'
+import $backend from '@/apis/backend'
 
 const columns = [{
   title: 'Rank',

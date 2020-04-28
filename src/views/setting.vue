@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import $backend from '../backend'
+import $backend from '@/apis/backend'
 import { mapGetters } from 'vuex'
 
 export default {

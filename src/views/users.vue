@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import $backend from '../backend'
+import $backend from '@/apis/backend'
 
 export default {
 

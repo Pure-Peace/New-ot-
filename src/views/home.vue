@@ -60,7 +60,7 @@
           <span
             class="my-button-span my-hover2"
             style="margin-left: 15px;background-color:#108BDD; box-shadow: 0 4px #0B5383, 0 2px 2px #000;"
-            @click="$router.push({ path: '/tourney' })"
+            @click="$router.push({ path: '/results' })"
           >
             比赛战报
           </span>
@@ -284,7 +284,7 @@
 </template>
 
 <script>
-import $backend from '../backend'
+import $backend from '@/apis/backend'
 import { mapGetters } from 'vuex'
 
 export default {

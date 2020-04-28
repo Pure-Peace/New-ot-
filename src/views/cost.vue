@@ -161,7 +161,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import $backend from '../backend'
+import $backend from '@/apis/backend'
 
 export default {
   data () {

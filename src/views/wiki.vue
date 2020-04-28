@@ -16,7 +16,7 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import $backend from '../backend'
+import $backend from '@/apis/backend'
 
 export default {
   components: {

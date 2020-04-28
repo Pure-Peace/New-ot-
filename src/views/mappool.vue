@@ -71,7 +71,7 @@
                     ref="searchText"
                     size="large"
                     class="my-input"
-                    placeholder="输入图池全名或创建者来搜索"
+                    placeholder="输入图池全名或创建者id来搜索"
                     :style="showSearch?'':'opacity:0; height: 0;padding:0;'"
                     @keypress.enter="handleSearch"
                   >
@@ -126,8 +126,17 @@
             >
               <div style="font-size: 13px; position: absolute; right: 20px; top: 15px; background-color: rgba(0, 0, 0, 0.1); padding: 4px 15px; border-radius: 40px;">
                 <span>推荐</span>
-                <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommend_elo) }} elo</span>
+                <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommendElo) }} elo</span>
               </div>
+              <a
+                :href="`/poolDetail/${pool.name}`"
+                target="_blank"
+                style="font-size: 12px; position: absolute; bottom: 15px; right: 95px; padding: 3px 12px; color: #FAFAFA;"
+                class="my-upload"
+                @click.stop=""
+              >
+                Link
+              </a>
               <div
                 style="font-size: 12px; position: absolute; bottom: 15px; right: 20px; padding: 3px 12px; border-radius: 40px;"
                 :style="`background-color: ${colorGetter(pool.status)};`"
@@ -144,7 +153,7 @@
                     @click="openLink(pool.creator)"
                   />
                   <div slot="title">
-                    <a href="https://osu.ppy.sh/users/${pool.creator}">访问主页</a>
+                    <a :href="`https://osu.ppy.sh/users/${pool.creator}`">访问主页</a>
                   </div>
                 </a-tooltip>
                 <div
@@ -154,7 +163,7 @@
                 </div>
               </div>
               <div style="font-size: 20px;">
-                {{ pool.mappool_name }}
+                {{ pool.name }}
               </div>
               <div style="margin-left: 5px; font-size: 12px;">
                 {{ pool.description }}
@@ -193,7 +202,7 @@
         style="border: 1px solid #41393D; border-radius: 4px; display: flex; flex-wrap: wrap;"
       >
         <div
-          v-for="(pool, idx) in showing"
+          v-for="(pool, idx) in showing.filter(pool => pool.status !== 'Pending')"
           :key="idx"
           style="margin-left: 36px; width: 44%;"
         >
@@ -204,7 +213,7 @@
           >
             <div style="font-size: 13px; position: absolute; right: 20px; top: 15px; background-color: rgba(0, 0, 0, 0.1); padding: 4px 15px; border-radius: 40px;">
               <span>推荐</span>
-              <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommend_elo) }} elo</span>
+              <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommendElo) }} elo</span>
             </div>
             <div
               style="font-size: 12px; position: absolute; bottom: 15px; right: 20px; padding: 3px 12px; border-radius: 40px;"
@@ -212,6 +221,15 @@
             >
               {{ pool.status }}
             </div>
+            <a
+              :href="`/poolDetail/${pool.name}`"
+              target="_blank"
+              style="font-size: 12px; position: absolute; bottom: 15px; right: 95px; padding: 3px 12px; color: #FAFAFA;"
+              class="my-upload"
+              @click.stop=""
+            >
+              Link
+            </a>
             <div style="position: absolute; left: 20px; bottom: 15px; display: flex;">
               <a-tooltip>
                 <a-avatar
@@ -219,7 +237,7 @@
                   icon="user"
                   :src="`https://a.ppy.sh/${pool.creator}?.jpg`"
                   style="background-color: #grey; transition: .2s ease-in-out;cursor: pointer;user-select: none;"
-                  @click="openLink(pool.creator)"
+                  @click.stop="openLink(pool.creator)"
                 />
                 <div slot="title">
                   <a :href="`https://osu.ppy.sh/users/${pool.creator}`">访问主页</a>
@@ -232,7 +250,7 @@
               </div>
             </div>
             <div style="font-size: 20px;">
-              {{ pool.mappool_name }}
+              {{ pool.name }}
             </div>
             <div style="margin-left: 5px; font-size: 12px;">
               {{ pool.description }}
@@ -286,7 +304,7 @@
         class="block-content"
         style="border: 1px solid #41393D; border-radius: 4px; display: flex; flex-wrap: wrap;"
       >
-        <a-tooltip title="已上传8个图池">
+        <a-tooltip title="已上传114514个图池">
           <div class="star-uploader">
             <div>
               <img
@@ -294,7 +312,7 @@
                 :src="`http://a.ppy.sh/5084172?.jpg`"
               >
             </div>
-            <div style="padding: 12px 10px; text-align: center;">
+            <div style="padding: 12px 10px; text-align: center; background-color: rgba(0,0,0,0.1);">
               {{ `五星级大厨` }}
             </div>
           </div>
@@ -315,6 +333,12 @@
           >
             创建属于您自己的图池
           </span>
+          <span
+            class="my-button-span my-hover2"
+            style="margin-left: 15px; background-color: rgb(16, 139, 221); box-shadow: rgb(11, 83, 131) 0px 4px, rgb(0, 0, 0) 0px 2px 2px;"
+          >
+            图池管理
+          </span>
         </div>
       </div>
     </div>
@@ -322,7 +346,7 @@
 </template>
 
 <script>
-import $mappool from '@/apis/mappool'
+import { MapPool } from '@/apis/elo-mappool-client'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -344,24 +368,24 @@ export default {
     }
 
   },
-  mounted () {
-    this.getPools()
+  async mounted () {
+    await this.getPools()
   },
   methods: {
     async getPools () {
-      const result = await $mappool.gg()
-      if (result) this.initing = false
+      const result = await new MapPool().getPools()
       console.log(result)
+      if (result) this.initing = false
       this.showing = result.slice(0, 8)
       this.pools = result
     },
     mappoolDetail (pool) {
-      this.$router.push({ name: 'poolDetail', params: { pool, poolName: pool.mappool_name } })
+      this.$router.push({ name: 'poolDetail', params: { pool, poolName: pool.name } })
     },
     colorGetter (status) {
       const colorData = {
         'Pending': 'rgba(244,213,135,.43)',
-        'Overjoy': 'rgba(135,226,244,.43)',
+        'Overjoy': 'rgba(233, 132, 132,.43)',
         'Ranked': 'rgba(50,226,123,.43)',
         'Tourney': 'rgba(50,226,123,.43)'
       }
@@ -393,7 +417,7 @@ export default {
       return done
     },
     openLink (osuid) {
-      window.open(`https://osu.ppy.sh/${osuid}`, '_blank')
+      window.open(`https://osu.ppy.sh/users/${osuid}`, '_blank')
     },
     showMyUpload () {
       if (this.loginStatus && this.osuid) {
@@ -417,7 +441,7 @@ export default {
         let pool
         for (let i = 0; i < this.pools.length; i++) {
           pool = this.pools[i]
-          if (pool['mappool_name'].toLowerCase().search(searchKey.toLowerCase()) !== -1) {
+          if (pool['name'].toLowerCase().search(searchKey.toLowerCase()) !== -1) {
             results.push(pool)
           } else if (pool['creator'].toString() === searchKey || pool['submitter'].toString() === searchKey) {
             results.push(pool)

@@ -14,7 +14,7 @@ import topNav from '@/layout/topNav'
 import contentLayout from '@/layout/contentLayout'
 import footerBar from '@/layout/footerBar'
 import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
-import $backend from '@/backend'
+import $backend from '@/apis/backend'
 
 export default {
   name: 'App',
