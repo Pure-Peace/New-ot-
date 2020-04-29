@@ -113,6 +113,7 @@
                           style="transition: .4s ease; color: #AFA6A6"
                           class="link-spn"
                           :href="`https://osu.ppy.sh/community/matches/${item.match_id}`"
+                          target="_blank"
                         >
                           mplink
                         </a>
@@ -169,6 +170,7 @@
                             class="user-link"
                             style="float: left;color: #28B463;"
                             :href="`https://osu.ppy.sh/users/${gplayer.user_id}`"
+                            target="_blank"
                           >
                             {{ gplayer.username }}
                           </a>
@@ -229,6 +231,7 @@
                           <a-tooltip :title="`${match.map_artist} / ${match.map_title}`">
                             <a
                               :href="`https://osu.ppy.sh/beatmaps/${match.map_id}`"
+                              target="_blank"
                               class="turn-color-link"
                             >
                               <span style="font-size: 18px; font-weight: normal;">{{ match.map_artist.slice(0,26) }}{{ match.map_artist.length > 26 ? '...' : '' }}</span>
@@ -290,6 +293,7 @@
                                 style="float: left;"
                                 :style="player.team_color === 'none'? 'color: #28B463;' : 'color: #63B7F0;'"
                                 :href="`https://osu.ppy.sh/users/${player.user_id}`"
+                                target="_blank"
                               >
                                 {{ player.username }}
                               </a>
@@ -374,6 +378,7 @@
                                 style="color: #F1948A;"
                                 :style="player.team_color === 'red' ? 'float: right;' : ''"
                                 :href="`https://osu.ppy.sh/users/${player.user_id}`"
+                                target="_blank"
                               >
                                 {{ player.username }}
                               </a>
