@@ -165,8 +165,13 @@
               <div style="font-size: 20px;">
                 {{ pool.name }}
               </div>
-              <div style="margin-left: 5px; font-size: 12px;">
-                {{ pool.description }}
+              <div style="margin-left: 0; font-size: 12px; margin-top: 6px;">
+                <a-rate
+                  v-model="pool.rating"
+                  disabled
+                  style="font-size: 12px;"
+                />
+                <span>已有{{ pool.ratingCount }}人评分</span>
               </div>
             </div>
           </div>
@@ -184,22 +189,15 @@
       </div>
     </a-spin>
 
-    <div>
-      <div
-        class="big-title"
-        style="margin-top: 50px;"
-      >
-        <div>
-          推荐图池
-          <span style="font-size: 12px;">
-            Recommend
-          </span>
-        </div>
+    <div style="position: relative; border: 1px solid #5C4951; font-weight: lighter; background-color: #201C1C; padding: 35px 40px; margin-top: 30px; border-radius: 8px; box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.04), 0 6px 6px 0 rgba(0, 0, 0, 0.04);">
+      <div style="font-size: 24px;  padding: 10px 30px; display: inline-block; border-left: 2px solid #66BB6A;">
+        <span>推荐图池</span>
+        <span style="margin: 0 8px; font-size: 14px;">/</span>
+        <span style="font-size: 14px;">Recommend</span>
       </div>
 
       <div
-        class="block-content"
-        style="border: 1px solid #41393D; border-radius: 4px; display: flex; flex-wrap: wrap;"
+        style="border-radius: 4px; display: flex; flex-wrap: wrap; padding: 30px 0;"
       >
         <div
           v-for="(pool, idx) in showing.filter(pool => pool.status !== 'Pending')"
@@ -252,14 +250,19 @@
             <div style="font-size: 20px;">
               {{ pool.name }}
             </div>
-            <div style="margin-left: 5px; font-size: 12px;">
-              {{ pool.description }}
+            <div style="margin-left: 0; font-size: 12px; margin-top: 6px;">
+              <a-rate
+                v-model="pool.rating"
+                disabled
+                style="font-size: 12px;"
+              />
+              <span>已有{{ pool.ratingCount }}人评分</span>
             </div>
           </div>
           <div style="margin: -1px 0 0 20px; padding: 15px 20px; background-color: #221C1F; font-weight: lighter; width: 100%; border-radius: 0 0 8px 8px ; border: 1px solid #41393D;">
             <div style="position: relative;">
               <div>
-                推荐原因：I Really HeHe le.
+                推荐原因：值得推荐！
               </div>
               <div style="display: flex; position: absolute; right: 0; top: -6px;">
                 <a-tooltip>
@@ -287,59 +290,56 @@
       </div>
     </div>
 
-    <div>
-      <div
-        class="big-title"
-        style="margin-top: 50px;"
-      >
-        <div>
-          明星上传者
-          <span style="font-size: 12px;">
-            Star Uploader
-          </span>
-        </div>
+    <div style="position: relative; border: 1px solid #5C4951; font-weight: lighter; background-color: #201C1C; padding: 35px 40px; margin-top: 30px; border-radius: 8px; box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.04), 0 6px 6px 0 rgba(0, 0, 0, 0.04);">
+      <div style="font-size: 24px;  padding: 10px 30px; display: inline-block; border-left: 2px solid #66BB6A;">
+        <span>图池创作者</span>
+        <span style="margin: 0 8px; font-size: 14px;">/</span>
+        <span style="font-size: 14px;">Creators</span>
       </div>
 
       <div
-        class="block-content"
-        style="border: 1px solid #41393D; border-radius: 4px; display: flex; flex-wrap: wrap;"
+        style="padding: 30px; border-radius: 4px; display: flex; flex-wrap: wrap;"
       >
-        <a-tooltip title="已上传114514个图池">
+        <a-tooltip
+          v-for="(uploader) in uploaders"
+          :key="uploader"
+          :title="osuPlayers[uploader] && osuPlayers[uploader].osuname || uploader"
+        >
           <div class="star-uploader">
             <div>
               <img
-                style="border-radius: 8px 8px 0 0; width: 160px;"
-                :src="`http://a.ppy.sh/5084172?.jpg`"
+                style="border-radius: 8px 8px 0 0; width: 140px; height: 140px;"
+                :src="`http://a.ppy.sh/${uploader}?.jpg`"
               >
             </div>
             <div style="padding: 12px 10px; text-align: center; background-color: rgba(0,0,0,0.1);">
-              {{ `五星级大厨` }}
+              <a :href="`https://osu.ppy.sh/users/${uploader}`">{{ osuPlayers[uploader] && osuPlayers[uploader].osuname || uploader }}</a>
             </div>
           </div>
         </a-tooltip>
       </div>
+    </div>
 
-      <div style="border-left: 6px solid #362F32 ;border-right: 6px solid #362F32 ;background: #272023; padding: 45px 20px; margin: 60px auto 30px auto; text-align: center; width: 100%; border-radius: 6px;">
-        <div style="font-size: 32px; font-weight: lighter; color: #F2F2F2;">
-          没有想要的图池？
-        </div>
-        <div style="margin-top: 10px; margin-bottom: 40px;font-weight: lighter; font-size: 16px; color: #DDD0D5;">
-          <span>您可以选择创建自己的图池，让大家一起来玩~！</span>
-        </div>
-        <div>
-          <span
-            class="my-button-span my-hover1"
-            style="background-color: #EA5197; box-shadow: 0 4px #86385b, 0 2px 2px #000;"
-          >
-            创建属于您自己的图池
-          </span>
-          <span
-            class="my-button-span my-hover2"
-            style="margin-left: 15px; background-color: rgb(16, 139, 221); box-shadow: rgb(11, 83, 131) 0px 4px, rgb(0, 0, 0) 0px 2px 2px;"
-          >
-            图池管理
-          </span>
-        </div>
+    <div style="border-left: 6px solid #362F32 ;border-right: 6px solid #362F32 ;background: #272023; padding: 45px 20px; margin: 60px auto 30px auto; text-align: center; width: 100%; border-radius: 6px;">
+      <div style="font-size: 32px; font-weight: lighter; color: #F2F2F2;">
+        没有想要的图池？
+      </div>
+      <div style="margin-top: 10px; margin-bottom: 40px;font-weight: lighter; font-size: 16px; color: #DDD0D5;">
+        <span>您可以选择创建自己的图池，让大家一起来玩~！</span>
+      </div>
+      <div>
+        <span
+          class="my-button-span my-hover1"
+          style="background-color: #EA5197; box-shadow: 0 4px #86385b, 0 2px 2px #000;"
+        >
+          创建属于您自己的图池
+        </span>
+        <span
+          class="my-button-span my-hover2"
+          style="margin-left: 15px; background-color: rgb(16, 139, 221); box-shadow: rgb(11, 83, 131) 0px 4px, rgb(0, 0, 0) 0px 2px 2px;"
+        >
+          图池管理
+        </span>
       </div>
     </div>
   </div>
@@ -347,6 +347,7 @@
 
 <script>
 import { MapPool } from '@/apis/elo-mappool-client'
+import $backend from '@/apis/backend'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -357,7 +358,9 @@ export default {
       showing: [],
       showSearch: false,
       inDraw: false,
-      dataTemp: []
+      dataTemp: [],
+      uploaders: [],
+      osuPlayers: {}
 
     }
   },
@@ -374,10 +377,17 @@ export default {
   methods: {
     async getPools () {
       const result = await new MapPool().getPools()
-      console.log(result)
-      if (result) this.initing = false
+      var item
+      if (result) {
+        for (let i = 0; i < result.length; i++) {
+          item = result[i]
+          this.uploaders.push(item.creator)
+          this.getOsuName(item.creator)
+        }
+      }
       this.showing = result.slice(0, 8)
       this.pools = result
+      this.initing = false
     },
     mappoolDetail (pool) {
       this.$router.push({ name: 'poolDetail', params: { pool, poolName: pool.name } })
@@ -426,6 +436,22 @@ export default {
         this.handleSearch('', this.osuid)
       } else {
         this.$message.warning('登录otsu后才能看到您创建的图池哦~')
+      }
+    },
+    getOsuName (osuid) {
+      try {
+        if (osuid) {
+          const result = this.osuPlayers[osuid]
+          if (!result) {
+            this.osuPlayers[osuid] = $backend.getOsuData(osuid).then(
+              res => {
+                const result = res
+                this.osuPlayers[osuid] = result
+              }
+            )
+          }
+        }
+      } catch {
       }
     },
     handleSearch (e, searchKey) {
@@ -572,4 +598,7 @@ export default {
     background-color: rgba(185, 88, 120, 0.24);
   }
 
+  a {
+    color: #FAFAFA;
+  }
 </style>

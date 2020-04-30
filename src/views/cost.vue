@@ -231,7 +231,7 @@ export default {
       }
     },
     openLink (osuid) {
-      window.open(`https://osu.ppy.sh/${osuid}`, '_blank')
+      window.open(`https://osu.ppy.sh/users/${osuid}`, '_blank')
     },
     getFormulars () {
       var token

@@ -2,7 +2,7 @@ import $axios from './requester'
 
 const eloApi = 'http://api.osuwiki.cn:5005/api'
 const otsuApi = 'http://otsu.fun:9529'
-const mappoolApi = 'http://47.101.168.165:5004'
+const newEloApi = 'http://47.101.168.165:5004'
 // const otsuApi = 'http://localhost:9529' // dev
 
 export default {
@@ -91,8 +91,33 @@ export default {
       .then(response => response.data)
   },
   test1 () {
-    return $axios.get(`${mappoolApi}/pools`)
+    return $axios.get(`${newEloApi}/pools`)
+      .then(response => response.data)
+  },
+  getOsuData (osuid, action = 'simple') {
+    return $axios.get(`${otsuApi}/getPlayerDataV1?playerKey=${osuid}&action=${action}`)
+      .then(response => response.data.data)
+  },
+  getMappoolRating (mappoolName, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
+    return $axios.get(`${newEloApi}/pools/${mappoolName}/rating`, { headers })
+      .then(response => response.data)
+  },
+  handleSubmitMappoolRating (mappoolName, data = { 'rating': 5 }, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
+    data['submitter'] = headers.osuid
+    return $axios.post(`${newEloApi}/pools/${mappoolName}/rating`, data, { headers })
+      .then(response => response.data)
+  },
+  handleGetMappoolComments (mappoolName) {
+    return $axios.get(`${newEloApi}/pools/${mappoolName}/comments`)
+      .then(response => response.data)
+  },
+  handleSubmitMappoolComment (mappoolName, data = { comment: '好评如潮。', reply: 0 }, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
+    data['submitter'] = headers.osuid
+    return $axios.post(`${newEloApi}/pools/${mappoolName}/comments`, data, { headers })
+      .then(response => response.data)
+  },
+  handleDeleteMappoolComment (commentId, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
+    return $axios.delete(`${newEloApi}/pools/{mappool_name}/comments?comment_id=${commentId}`, { headers })
       .then(response => response.data)
   }
-
 }
