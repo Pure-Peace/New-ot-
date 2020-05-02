@@ -85,7 +85,7 @@
                 </div>
                 <div style="background-color: rgba(0, 0, 0, 0.1); padding: 10px; margin-left: 20px; border-radius: 8px;">
                   <span>地图数:</span>
-                  <span style="margin-left: 6px; color: #F0F4C3;">{{ maps.length }}</span>
+                  <span style="margin-left: 6px; color: #F0F4C3;">{{ stageSort[currentStrage].mapList.length }}</span>
                 </div>
                 <div style="background-color: rgba(0, 0, 0, 0.1); padding: 10px; margin-left: 10px; border-radius: 8px;">
                   <span>平均星数:</span>
@@ -226,16 +226,16 @@
               :key="modPoolIdx"
             >
               <div
-                :id="modName + beatmap.index"
-                :ref="modName + beatmap.index"
+                :id="modName + beatmap.index + beatmap.stage"
+                :ref="modName + beatmap.index + beatmap.stage"
                 :style="`border: 2px solid ${getModColor(modName)}B2;`"
                 class="beatmap-in-pool"
                 style="width: 900px; height: 100px;"
-                @click="beatmapItemOnClick(modName + beatmap.index)"
+                @click="beatmapItemOnClick(modName + beatmap.index + beatmap.stage)"
               >
                 <div
                   v-if="beatmap.beatmapSetId"
-                  :ref="modName + beatmap.index + 'cover'"
+                  :ref="modName + beatmap.index + beatmap.stage + 'cover'"
                   class="beatmap-cover"
                   :style="`background-image: url(https://assets.ppy.sh/beatmaps/${beatmap.beatmapSetId}/covers/cover.jpg?);`"
                 />
@@ -297,7 +297,7 @@
                     style="padding: 4px 8px; border-radius: 40px;"
                   >
                     <a-icon
-                      :ref="modName + beatmap.index + 'arrow'"
+                      :ref="modName + beatmap.index + beatmap.stage + 'arrow'"
                       class="turn-color-link"
                       type="down"
                       style="font-size: 12px; transition: .6s ease;"
@@ -308,14 +308,14 @@
                 <div
                   style="top: 247px; right: 50%; font-size: 13px; background-color: rgba(0, 0, 0, 0.4); border-radius: 8px 8px 0 0; user-select: none; cursor: pointer;"
                   class="beatmap-in-pool-item"
-                  @click.stop="beatmapShowMore(modName + beatmap.index)"
+                  @click.stop="beatmapShowMore(modName + beatmap.index + beatmap.stage)"
                 >
                   <a-tooltip title="附加菜单">
                     <div
                       style="padding: 0 12px; border-radius: 8px 8px 0 0;"
                     >
                       <a-icon
-                        :ref="modName + beatmap.index + 'arrow-more'"
+                        :ref="modName + beatmap.index + beatmap.stage + 'arrow-more'"
                         class="turn-color-link"
                         type="down"
                         style="font-size: 13px; transition: .6s ease;"
@@ -483,7 +483,7 @@
               </div>
               <div
                 v-if="beatmap.banchoResultReady"
-                :ref="modName + beatmap.index + 'more'"
+                :ref="modName + beatmap.index + beatmap.stage + 'more'"
                 :style="`border: 2px solid ${getModColor(modName)}B2;`"
                 class="beatmap-in-pool"
                 style="width: 680px; position: relative; height: 0px; opacity: 0; transition: .5s ease; margin-top: -20px;"
@@ -546,7 +546,7 @@
                 </div>
                 <div
                   v-if="beatmap.beatmapSetId"
-                  :ref="modName + beatmap.index + 'cover'"
+                  :ref="modName + beatmap.index + beatmap.stage + 'cover'"
                   class="beatmap-cover beatmap-cover-more"
                   :style="`background-image: url(https://assets.ppy.sh/beatmaps/${beatmap.beatmapSetId}/covers/cover.jpg?); position: absolute; top: 0; left: 0;`"
                 />
@@ -797,7 +797,7 @@
                         style="max-width: 90%;"
                       >
                         <div style="word-wrap:break-word;">
-                          {{ (comment.reply === 0 ? '：' : `回复@${osuPlayers[sucker(comment)] && osuPlayers[sucker(comment)].osuname || sucker(comment)}：`) + comment.comment }}
+                          {{ (comment.reply === 0 ? '' : `回复@${osuPlayers[sucker(comment)] && osuPlayers[sucker(comment)].osuname || sucker(comment)}：`) + comment.comment }}
                         </div>
                       </div>
                     </div>
@@ -1034,7 +1034,7 @@ export default {
       var beatmap
       for (let i = 0; i < modPool.length; i++) {
         beatmap = modPool[i]
-        this.beatmapItemOnClick(modName + beatmap.index, true)
+        this.beatmapItemOnClick(modName + beatmap.index + beatmap.stage, true)
       }
     },
     refreshComments () {
@@ -1216,7 +1216,7 @@ export default {
         if (item.banchoResultReady === true) data.readyMaps += 1
       }
 
-      if (data.readyMaps === this.maps.length) {
+      if (data.readyMaps === this.stageSort[this.currentStrage].mapList.length) {
         for (let i = 0; i < mapList.length; i++) {
           item = mapList[i]
           data.avgStars += item.difficulty.rating
@@ -1227,6 +1227,7 @@ export default {
           if (item.approvalStatus === 'Ranked') data.mapCounts.Ranked += 1
           else if (item.approvalStatus === 'Qualified') data.mapCounts.Qualified += 1
           else if (item.approvalStatus === 'Approved') data.mapCounts.Ranked += 1
+          else if (item.approvalStatus === 'Loved') data.mapCounts.Loved += 1
           else data.mapCounts.Unranked += 1
           data.totalLength += item.length.total
         }
