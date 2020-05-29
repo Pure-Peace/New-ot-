@@ -197,7 +197,7 @@ export default {
             this.logining = false
             this.color = '#2ECC71'
             this.$store.commit('userLogin', responseData)
-            this.$socket.io.opts.query = { 'otsu_token': this.token, 'osuid': this.osuid }
+            this.$socket.io.opts.query = { otsu_token: this.token, osuid: this.osuid }
             this.$socket.connect()
             this.visible = false
             this.showMsg('success', '\\*^o^*//登录成功啦', `${responseData.data.userInfo.osuname}酱，欢迎来到o!t~`)
@@ -240,7 +240,7 @@ export default {
     },
     hendleLogout () {
       this.visible = false
-      let that = this
+      const that = this
       this.$confirm({
         title: '真的要登出嘛..？',
         content: '(๑•ᴗ•๑)♡ 按下确定就可以退出了哦！',

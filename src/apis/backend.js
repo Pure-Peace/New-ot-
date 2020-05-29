@@ -17,7 +17,7 @@ export default {
   },
 
   fetchWiki () {
-    return $axios.get(`http://osu.miya.ink/wiki.html`)
+    return $axios.get('http://osu.miya.ink/wiki.html')
       .then(response => response.data)
   },
 
@@ -55,11 +55,11 @@ export default {
       .then(response => response.data)
   },
   setLoginAccount (username, password, token, osuid) {
-    return $axios.post(`${otsuApi}/setLoginAccount`, { username: username, password: password }, { headers: { 'X-OtsuToken': token, 'Osuid': osuid } })
+    return $axios.post(`${otsuApi}/setLoginAccount`, { username: username, password: password }, { headers: { 'X-OtsuToken': token, Osuid: osuid } })
       .then(response => response.data)
   },
   loginStatusChecker (token, osuid) {
-    return $axios.post(`${otsuApi}/loginStatusChecker`, {}, { headers: { 'X-OtsuToken': token, 'Osuid': osuid } })
+    return $axios.post(`${otsuApi}/loginStatusChecker`, {}, { headers: { 'X-OtsuToken': token, Osuid: osuid } })
       .then(response => response.data)
   },
   eloGetUserByOsuName (username) {
@@ -73,7 +73,7 @@ export default {
   getCostFormulas (token, osuid) {
     var headers = {}
     if (token && token.length > 1 && osuid && osuid.length > 1) {
-      headers = { headers: { 'X-OtsuToken': token, 'Osuid': osuid } }
+      headers = { headers: { 'X-OtsuToken': token, Osuid: osuid } }
     }
     return $axios.post(`${otsuApi}/costFormulaGet`, {}, headers)
       .then(response => response.data)
@@ -91,33 +91,34 @@ export default {
       .then(response => response.data)
   },
   test1 () {
-    return $axios.get(`${newEloApi}/pools`)
+    return $axios.get(`${newEloApi}/mappool`)
       .then(response => response.data)
   },
   getOsuData (osuid, action = 'simple') {
     return $axios.get(`${otsuApi}/getPlayerDataV1?playerKey=${osuid}&action=${action}`)
       .then(response => response.data.data)
   },
-  getMappoolRating (mappoolName, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
-    return $axios.get(`${newEloApi}/pools/${mappoolName}/rating`, { headers })
+  getMappoolRating (mappoolName, headers = { osuid: 0, 'X-OtsuToken': 0 }) {
+    return $axios.get(`${newEloApi}/mappool/${mappoolName}/rating`, { headers })
       .then(response => response.data)
   },
-  handleSubmitMappoolRating (mappoolName, data = { 'rating': 5 }, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
-    data['submitter'] = headers.osuid
-    return $axios.post(`${newEloApi}/pools/${mappoolName}/rating`, data, { headers })
+  handleSubmitMappoolRating (mappoolName, data = { rating: 5 }, headers = { osuid: 0, 'X-OtsuToken': 0 }) {
+    data.submitter = headers.osuid
+    return $axios.post(`${newEloApi}/mappool/${mappoolName}/rating`, data, { headers })
       .then(response => response.data)
   },
   handleGetMappoolComments (mappoolName) {
-    return $axios.get(`${newEloApi}/pools/${mappoolName}/comments`)
+    return $axios.get(`${newEloApi}/mappool/${mappoolName}/comments`)
+      .then(response => response.data)
+      .catch(err => { console.log(err); return [] })
+  },
+  handleSubmitMappoolComment (mappoolName, data = { comment: '好评如潮。', reply: 0 }, headers = { osuid: 0, 'X-OtsuToken': 0 }) {
+    data.submitter = headers.osuid
+    return $axios.post(`${newEloApi}/mappool/${mappoolName}/comments`, data, { headers })
       .then(response => response.data)
   },
-  handleSubmitMappoolComment (mappoolName, data = { comment: '好评如潮。', reply: 0 }, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
-    data['submitter'] = headers.osuid
-    return $axios.post(`${newEloApi}/pools/${mappoolName}/comments`, data, { headers })
-      .then(response => response.data)
-  },
-  handleDeleteMappoolComment (commentId, headers = { 'osuid': 0, 'X-OtsuToken': 0 }) {
-    return $axios.delete(`${newEloApi}/pools/{mappool_name}/comments?comment_id=${commentId}`, { headers })
+  handleDeleteMappoolComment (commentId, headers = { osuid: 0, 'X-OtsuToken': 0 }) {
+    return $axios.delete(`${newEloApi}/mappool/{mappool_name}/comments?comment_id=${commentId}`, { headers })
       .then(response => response.data)
   }
 }

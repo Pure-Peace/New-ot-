@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import Antd from 'ant-design-vue'
+import antdv from 'ant-design-vue'
 import './antd-custom.less'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -23,13 +23,13 @@ if (loginData && loginData.authorize && loginData.user) {
   osuid = loginData.user.osuid || ''
 }
 
-let vueSocketIo = new VueSocketIO({
+const vueSocketIo = new VueSocketIO({
   debug: false,
   connection: 'http://otsu.fun:9530/test',
   options: {
     query: {
-      'otsu_token': token,
-      'osuid': osuid
+      otsu_token: token,
+      osuid: osuid
     }
   }
 })
@@ -47,7 +47,7 @@ Vue.use(vueSocketIo)
 smoothscroll.polyfill()
 Vue.prototype.global = global
 
-Vue.use(Antd)
+Vue.use(antdv)
 Vue.config.productionTip = false
 
 NProgress.configure({

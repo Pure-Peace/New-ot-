@@ -169,7 +169,7 @@
                 <a-rate
                   v-model="pool.rating"
                   disabled
-                  style="font-size: 12px;"
+                  style="font-size: 12px; margin-right: 10px;"
                 />
                 <span>已有{{ pool.ratingCount }}人评分</span>
               </div>
@@ -254,7 +254,7 @@
               <a-rate
                 v-model="pool.rating"
                 disabled
-                style="font-size: 12px;"
+                style="font-size: 12px; margin-right: 10px;"
               />
               <span>已有{{ pool.ratingCount }}人评分</span>
             </div>
@@ -394,12 +394,12 @@ export default {
     },
     colorGetter (status) {
       const colorData = {
-        'Pending': 'rgba(244,213,135,.43)',
-        'Overjoy': 'rgba(233, 132, 132,.43)',
-        'Ranked': 'rgba(50,226,123,.43)',
-        'Tourney': 'rgba(50,226,123,.43)'
+        Pending: 'rgba(244,213,135,.43)',
+        Overjoy: 'rgba(233, 132, 132,.43)',
+        Ranked: 'rgba(50,226,123,.43)',
+        Tourney: 'rgba(50,226,123,.43)'
       }
-      return colorData[status] || colorData['Pending']
+      return colorData[status] || colorData.Pending
     },
     draw () {
       if (this.inDraw !== true) {
@@ -423,7 +423,7 @@ export default {
       }
     },
     getNumbFormated (num) {
-      let done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      const done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
       return done
     },
     openLink (osuid) {
@@ -463,13 +463,13 @@ export default {
         if (this.dataTemp.length === 0) {
           this.dataTemp = this.showing
         }
-        let results = []
+        const results = []
         let pool
         for (let i = 0; i < this.pools.length; i++) {
           pool = this.pools[i]
-          if (pool['name'].toLowerCase().search(searchKey.toLowerCase()) !== -1) {
+          if (pool.name.toLowerCase().search(searchKey.toLowerCase()) !== -1) {
             results.push(pool)
-          } else if (pool['creator'].toString() === searchKey || pool['submitter'].toString() === searchKey) {
+          } else if (pool.creator.toString() === searchKey || pool.submitter.toString() === searchKey) {
             results.push(pool)
           }
         }
@@ -493,6 +493,36 @@ export default {
 </script>
 
 <style scoped>
+  .my-button-span {
+    text-shadow: 0 0px 3px #000000;
+    user-select: none;
+    display: inline-block;
+    padding: 8px 42px;
+    border-radius: 4px;
+    margin-left: 10px;
+    background-image: url('~@/assets/button.svg');
+    background-attachment:scroll;
+    background-size: 150%;
+    background-position-x: 0px;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+  .my-hover1:hover {
+    background-color: #F071AB !important;
+    background-position-x: -20px !important;
+  }
+  .my-hover1:active {
+    box-shadow: 0 1px #86385b, 0 2px 2px #000 !important;
+    transform: translateY(2px);
+  }
+  .my-hover2:hover {
+    background-color: #3DA3E7 !important;
+    background-position-x: -20px !important;
+  }
+  .my-hover2:active {
+    box-shadow: 0 1px #0B5383, 0 2px 2px #000 !important;
+    transform: translateY(2px);
+  }
   .block-content {
     background-color: #201C1C;
     width: 90%;

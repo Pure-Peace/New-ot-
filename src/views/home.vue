@@ -484,7 +484,7 @@ export default {
       })
     },
     getNumbFormated (num) {
-      let done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      const done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
       return done
     },
     getRecentBoard () {

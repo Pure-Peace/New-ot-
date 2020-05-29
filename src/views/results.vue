@@ -465,22 +465,22 @@ export default {
     fetchTourneys () {
       $backend.fetchTourneyList(
       ).then(responseData => {
-        let item = responseData.sort((a, b) => { return b.match_id - a.match_id })
+        const item = responseData.sort((a, b) => { return b.match_id - a.match_id })
         let tnyName
         let torneyItem
-        let tesha = {}
+        const tesha = {}
         for (let idx = 0; idx < item.length; idx++) {
           item[idx].loading = false
           item[idx].active = false
           tnyName = item[idx].tourney_name
           if (!tesha[tnyName]) {
-            tesha[tnyName] = { 'tourneys': [ item[idx] ] }
+            tesha[tnyName] = { tourneys: [item[idx]] }
           } else {
             tesha[tnyName].tourneys.push(item[idx])
           }
           tesha[tnyName].acronym = item[idx].acronym
         }
-        for (let tnyName in tesha) {
+        for (const tnyName in tesha) {
           torneyItem = tesha[tnyName].tourneys
           let minTime
           let maxTime
@@ -523,7 +523,7 @@ export default {
       }
     },
     getNumbFormated (num) {
-      let done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      const done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
       return done
     },
     handleSearch (e, searchKey) {
@@ -539,11 +539,11 @@ export default {
             this.dataTemp = this.tourneys
             this.idxTemp = this.pageIdx
           }
-          let results = []
+          const results = []
           let tourney
           for (let i = 0; i < this.dataTemp.length; i++) {
             tourney = this.dataTemp[i]
-            if (tourney['tourney_name'].toLowerCase().search(this.searchKey.toLowerCase()) !== -1) {
+            if (tourney.tourney_name.toLowerCase().search(this.searchKey.toLowerCase()) !== -1) {
               results.push(tourney)
             }
           }
@@ -609,7 +609,7 @@ export default {
     */
     audioPlay (mapCoverLink) {
       // let mapId = mapCoverLink.match(/beatmaps\/(\S*)\/covers/)[1]
-      let mapId = mapCoverLink
+      const mapId = mapCoverLink
       if (this.playing === mapId) {
         this.audio.pause()
         this.playing = null

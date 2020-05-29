@@ -1,19 +1,16 @@
 <template>
-  <a-locale-provider :locale="huohuo">
-    <div class="app">
-      <a-back-top />
-      <top-nav />
-      <content-layout />
-      <footer-bar />
-    </div>
-  </a-locale-provider>
+  <div class="app">
+    <a-back-top />
+    <top-nav />
+    <content-layout />
+    <footer-bar />
+  </div>
 </template>
 
 <script>
 import topNav from '@/layout/topNav'
 import contentLayout from '@/layout/contentLayout'
 import footerBar from '@/layout/footerBar'
-import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import $backend from '@/apis/backend'
 
 export default {
@@ -25,7 +22,6 @@ export default {
   },
   data () {
     return {
-      huohuo: zhCN
     }
   },
   beforeCreate () {

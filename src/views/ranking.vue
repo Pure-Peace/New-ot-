@@ -196,8 +196,7 @@ const columns = [{
   title: 'Name',
   dataIndex: 'username',
   width: '28%',
-  scopedSlots: {
-    customRender: 'username' }
+  scopedSlots: { customRender: 'username' }
 }, {
   title: 'Elo',
   dataIndex: 'elo',
@@ -233,13 +232,13 @@ export default {
       nowPage: 1,
       columns,
       userResults: {
-        'PP': 'pp_raw',
-        '全球排名': 'pp_rank',
-        '游玩次数': 'playcount',
-        '准确率': 'accuracy',
-        '等级': 'level',
-        '总分': 'total_score',
-        '注册时间': 'join_date'
+        PP: 'pp_raw',
+        全球排名: 'pp_rank',
+        游玩次数: 'playcount',
+        准确率: 'accuracy',
+        等级: 'level',
+        总分: 'total_score',
+        注册时间: 'join_date'
       }
     }
   },
@@ -301,8 +300,8 @@ export default {
         this.nowPage
       ).then(responseData => {
         const pagination = { ...this.pagination }
-        let ary = []
-        for (let idx in responseData.data) {
+        const ary = []
+        for (const idx in responseData.data) {
           ary.push(responseData.data[idx])
         }
         for (let i = 0; i < ary.length; i++) {

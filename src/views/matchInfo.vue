@@ -365,11 +365,11 @@ export default {
       this.smallIconType = 'fire'
     },
     getNumbFormated (num) {
-      let done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      const done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
       return done
     },
     audioPlay (mapCoverLink) {
-      let mapId = mapCoverLink
+      const mapId = mapCoverLink
       if (this.playing === mapId) {
         this.audio.pause()
         this.playing = null

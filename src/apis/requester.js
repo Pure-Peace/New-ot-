@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let $axios = axios.create({
+const $axios = axios.create({
   timeout: 17000,
   headers: { 'Content-Type': 'application/json' }
 })

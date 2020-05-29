@@ -21,7 +21,7 @@ export default {
   methods: {
     doubleGetEloInfo () {
       if (this.$route.params.userKey) {
-        let userKey = this.$route.params.userKey
+        const userKey = this.$route.params.userKey
         $backend.eloGetUserByOsuName(
           userKey
         ).then(responseData => {

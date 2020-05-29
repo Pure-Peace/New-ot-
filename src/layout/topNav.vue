@@ -132,7 +132,7 @@ export default {
       this.currentIdx = Math.floor(Math.random() * 3)
       this.imageX = 80
       this.imageY = 800
-      let lastTowards = this.towards
+      const lastTowards = this.towards
       this.towards = Math.floor(Math.random() * 4)
       if (this.towards === lastTowards) {
         switch (lastTowards) {
@@ -173,7 +173,7 @@ export default {
       this.$router.push({ name: name })
     },
     handleScroll () {
-      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       if (scrollTop > 100) {
         this.scrollFlag = true
       } else {
@@ -181,8 +181,8 @@ export default {
       }
     },
     handleMousemove (e) {
-      let nowMouseX = e.clientX || e.pageX || e.x
-      let nowMouseY = e.clientY || e.pageY || e.y
+      const nowMouseX = e.clientX || e.pageX || e.x
+      const nowMouseY = e.clientY || e.pageY || e.y
       if (this.lastMouseX !== 0 || this.lastMouseY !== 0) {
         this.imageX -= (nowMouseX - this.lastMouseX) / 4
         this.imageY -= (nowMouseY - this.lastMouseY) / 3

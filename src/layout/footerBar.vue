@@ -43,16 +43,20 @@ export default {
   data () {
     return {
       links: [
-        { title: '关于我们',
+        {
+          title: '关于我们',
           link: '#'
         },
-        { title: '服务器状态',
+        {
+          title: '服务器状态',
           link: '#'
         },
-        { title: '隐私政策',
+        {
+          title: '隐私政策',
           link: '#'
         },
-        { title: '服务条款',
+        {
+          title: '服务条款',
           link: '#'
         }
       ]

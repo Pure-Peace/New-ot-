@@ -294,13 +294,13 @@
                   class="beatmap-in-pool-item"
                 >
                   <div
-                    style="padding: 4px 8px; border-radius: 40px;"
+                    :ref="modName + beatmap.index + beatmap.stage + 'arrow'"
+                    style="padding: 4px 8px; border-radius: 40px; transition: .6s ease;"
                   >
                     <a-icon
-                      :ref="modName + beatmap.index + beatmap.stage + 'arrow'"
                       class="turn-color-link"
                       type="down"
-                      style="font-size: 12px; transition: .6s ease;"
+                      style="font-size: 12px;"
                     />
                   </div>
                 </div>
@@ -312,13 +312,13 @@
                 >
                   <a-tooltip title="附加菜单">
                     <div
-                      style="padding: 0 12px; border-radius: 8px 8px 0 0;"
+                      :ref="modName + beatmap.index + beatmap.stage + 'arrow-more'"
+                      style="padding: 0 12px; border-radius: 8px 8px 0 0; transition: .6s ease;"
                     >
                       <a-icon
-                        :ref="modName + beatmap.index + beatmap.stage + 'arrow-more'"
                         class="turn-color-link"
                         type="down"
-                        style="font-size: 13px; transition: .6s ease;"
+                        style="font-size: 13px; "
                       />
                     </div>
                   </a-tooltip>
@@ -920,7 +920,7 @@ export default {
       deleting: false,
       replyOpening: -1,
       mapsData: {
-        '总览': {
+        总览: {
           avgStars: 0,
           avgBpm: 0,
           avgLength: 0,
@@ -1007,7 +1007,7 @@ export default {
           onOk () {
             that.deleting = true
             $backend.handleDeleteMappoolComment(
-              comment.id, { 'osuid': that.osuid, 'X-OtsuToken': that.token }
+              comment.id, { osuid: that.osuid, 'X-OtsuToken': that.token }
             ).then(
               res => {
                 that.refreshComments()
@@ -1018,7 +1018,7 @@ export default {
               error => {
                 console.log(error)
                 that.deleting = false
-                that.$message.error(`删除失败了哦，您无法删除此条评论~（如权限不足）`)
+                that.$message.error('删除失败了哦，您无法删除此条评论~（如权限不足）')
               }
             )
           },
@@ -1041,7 +1041,7 @@ export default {
       $backend.handleGetMappoolComments(this.poolName).then(
         res => {
           this.comments = res
-          for (let i in res) {
+          for (const i in res) {
             this.getOsuName(res[i].submitter)
           }
         }
@@ -1051,9 +1051,9 @@ export default {
       })
     },
     refreshRating () {
-      var headers = { 'osuid': 0, 'X-OtsuToken': 0 }
+      var headers = { osuid: 0, 'X-OtsuToken': 0 }
       if (this.loginStatus) {
-        headers = { 'osuid': this.osuid, 'X-OtsuToken': this.token }
+        headers = { osuid: this.osuid, 'X-OtsuToken': this.token }
       }
       $backend.getMappoolRating(this.poolName, headers).then(
         res => {
@@ -1077,7 +1077,7 @@ export default {
           this.commenting = true
           const content = (reply === 0 && this.inputComment) || (reply !== 0 && this.replyComment)
           $backend.handleSubmitMappoolComment(
-            this.poolName, { comment: content, reply }, { 'osuid': this.osuid, 'X-OtsuToken': this.token }
+            this.poolName, { comment: content, reply }, { osuid: this.osuid, 'X-OtsuToken': this.token }
           ).then(
             res => {
               if (reply !== 0) {
@@ -1103,14 +1103,14 @@ export default {
           this.$message.warning('评论最少需要4个字或以上哦，请不要提交无意义的评论~')
         }
       } else {
-        this.$message.warning(`要提交评论请先登录哦~`)
+        this.$message.warning('要提交评论请先登录哦~')
       }
     },
     submitRating () {
       if (this.loginStatus) {
         if (this.myRating <= 5 && this.myRating > 0) {
           $backend.handleSubmitMappoolRating(
-            this.poolName, { 'rating': this.myRating }, { 'osuid': this.osuid, 'X-OtsuToken': this.token }
+            this.poolName, { rating: this.myRating }, { osuid: this.osuid, 'X-OtsuToken': this.token }
           ).then(
             res => {
               this.refreshRating()
@@ -1126,7 +1126,7 @@ export default {
           this.$message.warning('评分必须是在1-5之间的合法分数哦，请重新选择星星~')
         }
       } else {
-        this.$message.warning(`要提交评分请先登录哦~`)
+        this.$message.warning('要提交评分请先登录哦~')
       }
     },
     getOsuName (osuid) {
@@ -1146,9 +1146,9 @@ export default {
       }
     },
     beatmapShowMore (refName) {
-      let beatmapItemDom = this.$refs[refName][0]
-      let beatmapItemArrowMoreDom = this.$refs[refName + 'arrow-more'][0]
-      let beatmapItemMoreDom = this.$refs[refName + 'more'][0]
+      const beatmapItemDom = this.$refs[refName][0]
+      const beatmapItemArrowMoreDom = this.$refs[refName + 'arrow-more'][0]
+      const beatmapItemMoreDom = this.$refs[refName + 'more'][0]
 
       if (!beatmapItemDom.showMoreFlag) {
         beatmapItemArrowMoreDom.style.transform = 'rotate(180deg)'
@@ -1167,10 +1167,10 @@ export default {
       }
     },
     beatmapItemOnClick (refName, allTrue = false) {
-      let beatmapItemDom = this.$refs[refName][0]
-      let beatmapItemArrowDom = this.$refs[refName + 'arrow'][0]
+      const beatmapItemDom = this.$refs[refName][0]
+      const beatmapItemArrowDom = this.$refs[refName + 'arrow'][0]
 
-      let beatmapItemCoverDom = this.$refs[refName + 'cover'][0]
+      const beatmapItemCoverDom = this.$refs[refName + 'cover'][0]
 
       if (!beatmapItemDom.openFlag) {
         beatmapItemDom.style.height = '270px'
@@ -1253,12 +1253,12 @@ export default {
     },
     getMapColor (mapType) {
       const colors = {
-        'Ranked': '#64B5F6',
-        'Loved': '#e57373',
-        'Qualified': '#80CBC4',
-        'Unranked': '#FFCC80'
+        Ranked: '#64B5F6',
+        Loved: '#e57373',
+        Qualified: '#80CBC4',
+        Unranked: '#FFCC80'
       }
-      return colors[mapType] || colors['Unranked']
+      return colors[mapType] || colors.Unranked
     },
     eloColorGetter (elo) {
       const colors = [
@@ -1275,7 +1275,7 @@ export default {
       ]
       var targetColor
       for (let i = 0; i < colors.length; i++) {
-        let item = colors[i]
+        const item = colors[i]
         if (elo >= item[0]) {
           targetColor = item[1]
         }
@@ -1285,47 +1285,47 @@ export default {
 
     colorGetter (status) {
       const colors = {
-        'Pending': '#FFD54F',
-        'Overjoy': '#ef5350',
-        'Ranked': '#28AA5F',
-        'Tourney': '#28AA5F'
+        Pending: '#FFD54F',
+        Overjoy: '#ef5350',
+        Ranked: '#28AA5F',
+        Tourney: '#28AA5F'
       }
-      return colors[status] || colors['Pending']
+      return colors[status] || colors.Pending
     },
     getModFullName (modName) {
       const fullName = {
-        'NM': 'No-Mod',
-        'HD': 'Hidden',
-        'HR': 'HardRock',
-        'FM': 'FreeMod',
-        'DT': 'DoubleTime',
-        'TB': 'TieBreaker',
-        'UN': 'UnknownMod'
+        NM: 'No-Mod',
+        HD: 'Hidden',
+        HR: 'HardRock',
+        FM: 'FreeMod',
+        DT: 'DoubleTime',
+        TB: 'TieBreaker',
+        UN: 'UnknownMod'
       }
-      return fullName[modName] || fullName['UN']
+      return fullName[modName] || fullName.UN
     },
     getStageColor (stageName) {
       const colors = {
-        '总览': '#C5CAE9',
-        '小组赛': '#81C784',
-        '季后赛': '#9575CD'
+        总览: '#C5CAE9',
+        小组赛: '#81C784',
+        季后赛: '#9575CD'
       }
       return colors[stageName] || colors['小组赛']
     },
     getModColor (modName) {
       const colors = {
-        'NM': '#BBDEFB',
-        'HD': '#EEB62A',
-        'HR': '#ef5350',
-        'FM': '#42A5F5',
-        'DT': '#9575CD',
-        'TB': '#4CAF50',
-        'UN': '#9E9E9E'
+        NM: '#BBDEFB',
+        HD: '#EEB62A',
+        HR: '#ef5350',
+        FM: '#42A5F5',
+        DT: '#9575CD',
+        TB: '#4CAF50',
+        UN: '#9E9E9E'
       }
-      return colors[modName] || colors['UN']
+      return colors[modName] || colors.UN
     },
     getNumbFormated (num) {
-      let done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      const done = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
       return done
     },
     async initPage (params) {
@@ -1369,7 +1369,7 @@ export default {
         else modsSort[mod].push(map)
       }
 
-      for (let i in stageSort) {
+      for (const i in stageSort) {
         stageMaps = stageSort[i] || {}
         var tempModsSort = {}
         for (let v = 0; v < stageMaps.length; v++) {
@@ -1632,5 +1632,36 @@ export default {
 
   .selector-avatar:hover{
     box-shadow: 0 0 0 3px rgba(106, 62, 196, 0.698);
+  }
+
+    .my-button-span {
+    text-shadow: 0 0px 3px #000000;
+    user-select: none;
+    display: inline-block;
+    padding: 8px 42px;
+    border-radius: 4px;
+    margin-left: 10px;
+    background-image: url('~@/assets/button.svg');
+    background-attachment:scroll;
+    background-size: 150%;
+    background-position-x: 0px;
+    cursor: pointer;
+    transition: .2s ease;
+  }
+  .my-hover1:hover {
+    background-color: #F071AB !important;
+    background-position-x: -20px !important;
+  }
+  .my-hover1:active {
+    box-shadow: 0 1px #86385b, 0 2px 2px #000 !important;
+    transform: translateY(2px);
+  }
+  .my-hover2:hover {
+    background-color: #3DA3E7 !important;
+    background-position-x: -20px !important;
+  }
+  .my-hover2:active {
+    box-shadow: 0 1px #0B5383, 0 2px 2px #000 !important;
+    transform: translateY(2px);
   }
 </style>

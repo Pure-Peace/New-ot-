@@ -94,5 +94,37 @@ export default {
 </script>
 
 <style>
+.tourney-group-item {
+  box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.04), 0 6px 6px 0 rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  position: relative;
+  background-color: #272023;
+  border-radius: 6px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  width: 320px;
+  height: 145px;
+  transition: .4s ease;
+  cursor: pointer;
+}
+.tourney-group-item:hover {
+  box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.1), 0 6px 6px 0 rgba(0, 0, 0, 0.1);
+  /*transform: translateY(-2px);*/
 
+}
+.non-image-item:hover {
+  border: 1px solid #5D5156 !important;
+}
+.tourney-group-item:hover .tourney-group-image {
+  filter: brightness(.5) blur(0px);
+}
+.tourney-group-image {
+  filter: brightness(.4) blur(0px);
+  background-position:center;
+  background-size: cover;
+  background-repeat:no-repeat;
+  width: 320px; height: 145px;
+  border-radius: 6px;
+   transition: .4s ease;
+}
 </style>
