@@ -10,7 +10,7 @@
   "dependencies": {
     "@ant-design/dark-theme": "^2.0.2",
     "ant-design-vue": "^1.6.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "less": "^3.11.1",
     "less-loader": "4.1.0",
