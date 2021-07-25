@@ -28,10 +28,10 @@
             <div
               v-once
               style="font-size: 14px; background-color: rgba(0, 0, 0, 0.1); padding: 5px 15px; border-radius: 4px;"
-              :style="`border: 1px solid ${eloColorGetter(pool.recommendElo)}; color: ${eloColorGetter(pool.recommendElo)};`"
+              :style="`border: 1px solid ${eloColorGetter(pool.recommend_elo[0])}; color: ${eloColorGetter(pool.recommend_elo[0])};`"
             >
               <span style="font-size: 12px;">推荐</span>
-              <span style="margin-left: 4px; font-size:">{{ getNumbFormated(pool.recommendElo) }} elo+</span>
+              <span style="margin-left: 4px; font-size:">{{ getNumbFormated(pool.recommend_elo[0]) }} elo+</span>
             </div>
             <div
 
@@ -41,7 +41,7 @@
               <span>{{ currentStrage }}</span>
             </div>
             <span style="font-weight: lighter; font-size: 12px; color: #F2EAEE; margin-left: 20px; ">
-              2020年4月29日 00:00:00
+              {{ pool.date || '未知时间' }}
             </span>
           </div>
 
@@ -70,7 +70,7 @@
                     <span>
                       <span style="font-weight: bold;">{{ modName }}:</span>
                       <span style="margin-left: 5px;">{{ modPool.length }}</span>
-                      <span style="font-size: 12px; margin-left: 5px;">({{ (modPool.length / maps.length * 100).toFixed() }}%)</span>
+                      <span style="font-size: 12px; margin-left: 5px;">({{ (modPool.length / stageSort[currentStrage].mapList.length * 100).toFixed() }}%)</span>
                     </span>
                   </div>
                 </div>
@@ -168,7 +168,7 @@
                     >
                       <span>
                         <span style="font-weight: normal;">{{ stageName }}</span>
-                        <span style="margin-left: 5px;">({{ stageSort[stageName].total }})</span>
+                        <span style="margin-left: 5px;">({{ stageSort[stageName].mapList.length }})</span>
                       </span>
                     </div>
                   </a-tooltip>
@@ -189,11 +189,6 @@
               style="width: 500px; font-size: 12px;"
             >
               正在加载地图信息...
-              <a-progress
-                :stroke-width="6"
-                stroke-color="#28AA5F"
-                :percent="Math.round(mapsData['总览'].readyMaps / maps.length * 100)"
-              />
             </div>
           </div>
         </div>
@@ -226,18 +221,17 @@
               :key="modPoolIdx"
             >
               <div
-                :id="modName + beatmap.index + beatmap.stage"
-                :ref="modName + beatmap.index + beatmap.stage"
+                :id="modName + beatmap.mod_index + beatmap.stage"
+                :ref="modName + beatmap.mod_index + beatmap.stage"
                 :style="`border: 2px solid ${getModColor(modName)}B2;`"
                 class="beatmap-in-pool"
                 style="width: 900px; height: 100px;"
-                @click="beatmapItemOnClick(modName + beatmap.index + beatmap.stage)"
+                @click="beatmapItemOnClick(modName + beatmap.mod_index + beatmap.stage)"
               >
                 <div
-                  v-if="beatmap.beatmapSetId"
-                  :ref="modName + beatmap.index + beatmap.stage + 'cover'"
+                  :ref="modName + beatmap.mod_index + beatmap.stage + 'cover'"
                   class="beatmap-cover"
-                  :style="`background-image: url(https://assets.ppy.sh/beatmaps/${beatmap.beatmapSetId}/covers/cover.jpg?);`"
+                  :style="`background-image: url(https://assets.ppy.sh/beatmaps/${beatmap.beatmapset_id}/covers/cover.jpg?);`"
                 />
                 <div
                   style="top: 32px; left: 30px; padding: 4px 10px; border-radius: 40px; font-size: 13px; background-color: rgba(0, 0, 0, 0.2);"
@@ -245,7 +239,7 @@
                   class="beatmap-in-pool-item"
                   @click.stop=""
                 >
-                  <span style="font-weight: bold;">{{ modName }}{{ beatmap.index }}</span>
+                  <span style="font-weight: bold;">{{ modName }}{{ beatmap.mod_index }}</span>
                 </div>
 
                 <div
@@ -254,7 +248,6 @@
                   @click.stop=""
                 >
                   <a-tooltip
-                    v-if="beatmap.banchoResultReady"
                     :title="`${beatmap.artist} / ${beatmap.title}`"
                   >
                     <a
@@ -267,9 +260,6 @@
                       <span>{{ beatmap.title.slice(0,30) }}{{ beatmap.title.length > 30 ? '...' : '' }}</span>
                     </a>
                   </a-tooltip>
-                  <div v-else>
-                    地图{{ beatmap.id }}加载中...
-                  </div>
                 </div>
 
                 <div
@@ -278,14 +268,10 @@
                   @click.stop=""
                 >
                   <div
-                    v-if="beatmap.banchoResultReady"
                     style="padding: 4px 10px; border-radius: 40px;"
                     :style="`border: 1px solid ${getStageColor(beatmap.stage)}; color: ${getStageColor(beatmap.stage)}`"
                   >
                     <span style="font-weight: bold;">{{ beatmap.stage }}</span>
-                  </div>
-                  <div v-else>
-                    加载中...
                   </div>
                 </div>
 
@@ -294,7 +280,7 @@
                   class="beatmap-in-pool-item"
                 >
                   <div
-                    :ref="modName + beatmap.index + beatmap.stage + 'arrow'"
+                    :ref="modName + beatmap.mod_index + beatmap.stage + 'arrow'"
                     style="padding: 4px 8px; border-radius: 40px; transition: .6s ease;"
                   >
                     <a-icon
@@ -308,11 +294,11 @@
                 <div
                   style="top: 247px; right: 50%; font-size: 13px; background-color: rgba(0, 0, 0, 0.4); border-radius: 8px 8px 0 0; user-select: none; cursor: pointer;"
                   class="beatmap-in-pool-item"
-                  @click.stop="beatmapShowMore(modName + beatmap.index + beatmap.stage)"
+                  @click.stop="beatmapShowMore(modName + beatmap.mod_index + beatmap.stage)"
                 >
                   <a-tooltip title="附加菜单">
                     <div
-                      :ref="modName + beatmap.index + beatmap.stage + 'arrow-more'"
+                      :ref="modName + beatmap.mod_index + beatmap.stage + 'arrow-more'"
                       style="padding: 0 12px; border-radius: 8px 8px 0 0; transition: .6s ease;"
                     >
                       <a-icon
@@ -330,7 +316,6 @@
                   style="top: 93px; left: 0; width: 100%; padding: 5px;"
                 >
                   <div
-                    v-if="beatmap.banchoResultReady"
                     style="display: flex; margin: 0 auto; justify-content: center;"
                     @click.stop=""
                   >
@@ -339,7 +324,7 @@
                         CS
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ beatmap.difficulty.size }}
+                        {{ beatmap.diff_size }}
                       </div>
                     </div>
                     <div style="background-color: rgba(0,0,0,0.3); padding: 6px 10px; margin-left: 10px; border-radius: 4px;">
@@ -347,7 +332,7 @@
                         AR
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ beatmap.difficulty.approach }}
+                        {{ beatmap.diff_approach }}
                       </div>
                     </div>
                     <div style="background-color: rgba(0,0,0,0.3); padding: 6px 10px; margin-left: 10px; border-radius: 4px;">
@@ -355,7 +340,7 @@
                         OD
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ beatmap.difficulty.overall }}
+                        {{ beatmap.diff_overall }}
                       </div>
                     </div>
                     <div style="background-color: rgba(0,0,0,0.3); padding: 6px 10px; margin-left: 10px; border-radius: 4px;">
@@ -363,7 +348,7 @@
                         HP
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ beatmap.difficulty.drain }}
+                        {{ beatmap.diff_drain }}
                       </div>
                     </div>
                     <div style="background-color: rgba(0,0,0,0.3); padding: 6px 10px; margin-left: 10px; border-radius: 4px;">
@@ -371,7 +356,7 @@
                         BPM
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ beatmap.bpm.toFixed(0) }}
+                        {{ parseFloat(beatmap.bpm).toFixed(0) }}
                       </div>
                     </div>
                     <div style="background-color: rgba(0,0,0,0.3); padding: 6px 10px; margin-left: 20px; border-radius: 4px;">
@@ -379,10 +364,10 @@
                         难度
                       </div>
                       <div style="margin-top: 3px;">
-                        <span>{{ beatmap.difficulty.rating.toFixed(2) }} <a-icon type="star" /></span>
+                        <span>{{ parseFloat(beatmap.difficultyrating).toFixed(2) }} <a-icon type="star" /></span>
                         <span style="font-size: 12px; margin-left: 4px;">(
-                          <span style="color: #A5D6A7;">Aim: {{ beatmap.difficulty.aim.toFixed(2) }}</span> /
-                          <span style="color: #80CBC4;">Spd: {{ beatmap.difficulty.speed.toFixed(2) }}</span> )
+                          <span style="color: #A5D6A7;">Aim: {{ parseFloat(beatmap.diff_aim).toFixed(2) }}</span> /
+                          <span style="color: #80CBC4;">Spd: {{ parseFloat(beatmap.diff_speed).toFixed(2) }}</span> )
                         </span>
                       </div>
                     </div>
@@ -391,7 +376,7 @@
                         长度
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ secondToMinute(beatmap.length.total) }} ( {{ secondToMinute(beatmap.length.drain) }} )
+                        {{ secondToMinute(beatmap.total_length) }} ( {{ secondToMinute(beatmap.hit_length) }} )
                       </div>
                     </div>
                     <div style="background-color: rgba(0,0,0,0.3); padding: 6px 10px; margin-left: 10px; border-radius: 4px;">
@@ -399,7 +384,11 @@
                         物件数
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ beatmap.objects.normal }}
+                        {{
+                          parseInt(beatmap.count_normal) +
+                            parseInt(beatmap.count_slider) +
+                            parseInt(beatmap.count_spinner)
+                        }}
                       </div>
                     </div>
                     <div style="background-color: rgba(0,0,0,0.3); padding: 6px 10px; margin-left: 10px; border-radius: 4px;">
@@ -407,15 +396,9 @@
                         最大连击
                       </div>
                       <div style="margin-top: 3px;">
-                        {{ beatmap.maxCombo }}x
+                        {{ beatmap.max_combo }}x
                       </div>
                     </div>
-                  </div>
-                  <div
-                    v-else
-                    style="display: flex; justify-content: center;"
-                  >
-                    地图{{ beatmap.id }}加载中...
                   </div>
                 </div>
 
@@ -424,7 +407,6 @@
                   style="top: 165px; left: 5%; width: 90%; padding: 5px;"
                 >
                   <div
-                    v-if="beatmap.banchoResultReady"
                     style="display: flex; justify-content: center;"
                     @click.stop=""
                   >
@@ -443,7 +425,10 @@
                       </div>
 
                       <div style="margin-top: 3px;">
-                        {{ beatmap.creator }}
+                        <a
+                          target="_blank"
+                          :href="`https://osu.ppy.sh/users/${beatmap.creator_id}`"
+                        >{{ beatmap.creator }}</a>
                       </div>
                     </div>
 
@@ -453,7 +438,7 @@
                       </div>
 
                       <div style="margin-top: 3px;">
-                        {{ beatmap.id }}
+                        {{ beatmap.beatmap_id }}
                       </div>
                     </div>
 
@@ -461,7 +446,7 @@
                       <div
                         style="font-size: 12px; font-weight: bold;"
 
-                        :style="`color: ${getMapColor(beatmap.approvalStatus)};`"
+                        :style="`color: ${getMapColor(beatmapStatusFormatter(beatmap.approved))};`"
                       >
                         状态
                       </div>
@@ -469,21 +454,14 @@
                       <div
                         style="margin-top: 3px;"
                       >
-                        {{ beatmap.approvalStatus }}
+                        {{ beatmapStatusFormatter(beatmap.approved) }}
                       </div>
                     </div>
-                  </div>
-                  <div
-                    v-else
-                    style="display: flex; justify-content: center;"
-                  >
-                    加载中...
                   </div>
                 </div>
               </div>
               <div
-                v-if="beatmap.banchoResultReady"
-                :ref="modName + beatmap.index + beatmap.stage + 'more'"
+                :ref="modName + beatmap.mod_index + beatmap.stage + 'more'"
                 :style="`border: 2px solid ${getModColor(modName)}B2;`"
                 class="beatmap-in-pool"
                 style="width: 680px; position: relative; height: 0px; opacity: 0; transition: .5s ease; margin-top: -20px;"
@@ -493,27 +471,27 @@
                     <a
                       style="color: #BBDEFB;border-radius: 4px; background-color: rgba(0,0,0,0.4); padding: 6px 12px; font-size: 13px; margin-left: 20px;"
                       target="_blank"
-                      :href="`https://osu.sayobot.cn/osu.php?s=${beatmap.beatmapSetId}`"
+                      :href="`https://osu.sayobot.cn/osu.php?s=${beatmap.beatmapset_id}`"
                     >Sayo镜像下载</a>
                   </a-tooltip>
                   <a-tooltip title="从osu官网下载这张地图">
                     <a
                       style="color: #FFF9C4; border-radius: 4px; background-color: rgba(0,0,0,0.4); padding: 6px 12px; font-size: 13px; margin-left: 20px;"
                       target="_blank"
-                      :href="`https://osu.ppy.sh/beatmapsets/${beatmap.beatmapSetId}/download`"
+                      :href="`https://osu.ppy.sh/beatmapsets/${beatmap.beatmapset_id}/download`"
                     >官网下载</a>
                   </a-tooltip>
                   <a-tooltip title="通过osu!Direct下载地图（会启动游戏，需要supporter）">
                     <a
                       style="border-radius: 4px; background-color: rgba(0,0,0,0.4); padding: 6px 12px; font-size: 13px; margin-left: 20px;"
-                      :href="`osu://b/${beatmap.id}`"
+                      :href="`osu://b/${beatmap.beatmap_id}`"
                     >osu!Direct</a>
                   </a-tooltip>
                   <a-tooltip title="直接在网页上看auto游玩这张地图！">
                     <a
                       style="color: #E1BEE7; font-weight: normal; border-radius: 4px; background-color: rgba(0,0,0,0.4); padding: 6px 12px; font-size: 13px; margin-left: 20px;"
                       target="_blank"
-                      :href="`http://osugame.online/preview.html?sid=${beatmap.beatmapSetId}&bid=${beatmap.id}`"
+                      :href="`http://osugame.online/preview.html?sid=${beatmap.beatmapset_id}&bid=${beatmap.beatmap_id}`"
                     >在线预览</a>
                   </a-tooltip>
                 </div>
@@ -545,10 +523,10 @@
                   </div>
                 </div>
                 <div
-                  v-if="beatmap.beatmapSetId"
-                  :ref="modName + beatmap.index + beatmap.stage + 'cover'"
+                  v-if="beatmap.beatmapset_id"
+                  :ref="modName + beatmap.mod_index + beatmap.stage + 'cover'"
                   class="beatmap-cover beatmap-cover-more"
-                  :style="`background-image: url(https://assets.ppy.sh/beatmaps/${beatmap.beatmapSetId}/covers/cover.jpg?); position: absolute; top: 0; left: 0;`"
+                  :style="`background-image: url(https://assets.ppy.sh/beatmaps/${beatmap.beatmapset_id}/covers/cover.jpg?); position: absolute; top: 0; left: 0;`"
                 />
               </div>
             </div>
@@ -658,35 +636,19 @@
               <span style="font-size: 14px;">Contributor</span>
             </div>
             <div style="display: flex; margin-left: 20px; margin-top: 30px; border-radius: 8px; padding: 30px; padding-bottom: 0; white-space:normal; word-break:break-all; word-wrap:break-word;">
-              <a-tooltip :title="pool.creator">
+              <a-tooltip :title="pool.host">
                 <div class="star-uploader">
                   <div>
                     <img
                       style="border-radius: 8px 8px 0 0; height: 160px; border-bottom: 1px solid #41393D;"
-                      :src="`http://a.ppy.sh/${pool.creator}?.jpg`"
+                      :src="`http://a.ppy.sh/${pool.host}?.jpg`"
                     >
                   </div>
                   <div style="background-color: rgba(0,0,0,0.1); padding: 14px 10px; text-align: center; border-bottom: 1px solid #41393D;">
-                    {{ osuPlayers[pool.creator] && osuPlayers[pool.creator].osuname || pool.creator }}
+                    {{ osuPlayers[pool.host] && osuPlayers[pool.host].osuname || pool.host }}
                   </div>
                   <div style="background-color: rgba(0,0,0,0.1); padding: 8px 10px; text-align: center; font-weight: lighter; font-size: 12px; color: #A5D6A7;">
                     {{ `“图池创建者”` }}
-                  </div>
-                </div>
-              </a-tooltip>
-              <a-tooltip :title="pool.submitter">
-                <div class="star-uploader">
-                  <div>
-                    <img
-                      style="border-radius: 8px 8px 0 0; height: 160px;"
-                      :src="`http://a.ppy.sh/${pool.submitter}?.jpg`"
-                    >
-                  </div>
-                  <div style="background-color: rgba(0,0,0,0.1); padding: 14px 10px; text-align: center; border-bottom: 1px solid #41393D;">
-                    {{ osuPlayers[pool.submitter] && osuPlayers[pool.submitter].osuname || pool.submitter }}
-                  </div>
-                  <div style="background-color: rgba(0,0,0,0.1); padding: 8px 10px; text-align: center; font-weight: lighter; font-size: 12px; color: #F48FB1;">
-                    {{ `“最后提交者”` }}
                   </div>
                 </div>
               </a-tooltip>
@@ -893,7 +855,6 @@
 </template>
 
 <script>
-import { MapPool } from '@/apis/elo-mappool-client'
 import $backend from '@/apis/backend'
 import { mapGetters } from 'vuex'
 
@@ -902,7 +863,6 @@ export default {
     return {
       audio: new Audio(),
       initing: false,
-      mapPool: new MapPool({ autoComplete: true }),
       pool: undefined,
       poolName: undefined,
       maps: [],
@@ -933,29 +893,34 @@ export default {
             Qualified: 0,
             Unranked: 0
           },
-          totalLength: 0,
-          readyMaps: 0
+          totalLength: 0
         }
       },
       ratingLevel: ['难以言喻...', '褒贬不一。', '多半好评~', '特别好评！', '好评如潮！！']
     }
   },
   computed: {
-    ...mapGetters(['loginStatus', 'osuid', 'token'])
+    ...mapGetters(['loginStatus', 'osuid', 'token']),
+    beatmapStatusFormatter () {
+      return (status) => {
+        const s = {
+          '-1': 'WIP',
+          '-2': 'graveyard',
+          0: 'pending',
+          1: 'ranked',
+          2: 'approved',
+          3: 'qualified',
+          4: 'loved'
+        }
+        return s[status] || 'pending'
+      }
+    }
   },
   watch: {
     currentStrage (val) {
       this.currentShowMapSort = this.stageSort[val].maps
       if (!this.mapsData[val]) this.mapsData[val] = this.mapDataCalculator(this.stageSort[val].mapList)
       this.$message.success(`已将图池“${this.poolName}”切换到“${val}”阶段显示`)
-    },
-    maps: {
-      deep: true,
-      handler: function (mapList) {
-        const data = this.mapDataCalculator(mapList)
-        this.mapsData['总览'] = data
-        this.allMapInitialed = (data.readyMaps === this.maps.length)
-      }
     },
     loginStatus (val) {
       this.refreshRating()
@@ -1034,7 +999,7 @@ export default {
       var beatmap
       for (let i = 0; i < modPool.length; i++) {
         beatmap = modPool[i]
-        this.beatmapItemOnClick(modName + beatmap.index + beatmap.stage, true)
+        this.beatmapItemOnClick(modName + beatmap.mod_index + beatmap.stage, true)
       }
     },
     refreshComments () {
@@ -1207,37 +1172,29 @@ export default {
           Qualified: 0,
           Unranked: 0
         },
-        totalLength: 0,
-        readyMaps: 0
+        totalLength: 0
       }
 
       for (let i = 0; i < mapList.length; i++) {
         item = mapList[i]
-        if (item.banchoResultReady === true) data.readyMaps += 1
+        data.avgStars += parseFloat(item.difficultyrating)
+        data.avgBpm += parseFloat(item.bpm)
+        data.avgSpd += parseFloat(item.diff_speed)
+        data.avgAim += parseFloat(item.diff_aim)
+        data.avgAR += parseFloat(item.diff_approach)
+        if (item.approved === '1') data.mapCounts.Ranked += 1
+        else if (item.approved === '3') data.mapCounts.Qualified += 1
+        else if (item.approved === '2') data.mapCounts.Ranked += 1
+        else if (item.approved === '4') data.mapCounts.Loved += 1
+        else data.mapCounts.Unranked += 1
+        data.totalLength += parseInt(item.total_length)
       }
-
-      if (data.readyMaps === this.stageSort[this.currentStrage].mapList.length) {
-        for (let i = 0; i < mapList.length; i++) {
-          item = mapList[i]
-          data.avgStars += item.difficulty.rating
-          data.avgBpm += item.bpm
-          data.avgSpd += item.difficulty.speed
-          data.avgAim += item.difficulty.aim
-          data.avgAR += item.difficulty.approach
-          if (item.approvalStatus === 'Ranked') data.mapCounts.Ranked += 1
-          else if (item.approvalStatus === 'Qualified') data.mapCounts.Qualified += 1
-          else if (item.approvalStatus === 'Approved') data.mapCounts.Ranked += 1
-          else if (item.approvalStatus === 'Loved') data.mapCounts.Loved += 1
-          else data.mapCounts.Unranked += 1
-          data.totalLength += item.length.total
-        }
-        data.avgStars = data.avgStars / data.readyMaps
-        data.avgBpm = data.avgBpm / data.readyMaps
-        data.avgLength = data.totalLength / data.readyMaps
-        data.avgSpd = data.avgSpd / data.readyMaps
-        data.avgAim = data.avgAim / data.readyMaps
-        data.avgAR = data.avgAR / data.readyMaps
-      }
+      data.avgStars = data.avgStars / mapList.length
+      data.avgBpm = data.avgBpm / mapList.length
+      data.avgLength = data.totalLength / mapList.length
+      data.avgSpd = data.avgSpd / mapList.length
+      data.avgAim = data.avgAim / mapList.length
+      data.avgAR = data.avgAR / mapList.length
       return data
     },
     changeCurrentStage (stageName) {
@@ -1330,12 +1287,11 @@ export default {
     },
     async initPage (params) {
       this.initing = true
-      this.poolName = params.poolName || params.pool.name
-      this.pool = await this.mapPool.getPool({ name: this.poolName })
+      this.poolName = params.poolName || params.pool.mappool_name
+      this.pool = await $backend.getPool(this.poolName)
       if (this.pool) {
-        this.poolName = this.pool.name
-        this.getOsuName(this.pool.submitter)
-        this.getOsuName(this.pool.creator)
+        this.poolName = this.pool.mappool_name
+        this.getOsuName(this.pool.host)
         this.refreshRating()
 
         await this.getMaps()
@@ -1347,44 +1303,36 @@ export default {
       }
     },
     async getMaps () {
-      var modsSort = {}
-      var stageSort = {}
-      var map
-      var mod
-      var stage
-      var stageMaps
-      const maps = await this.pool.api.getMapsInPool(this.pool)
-      if (!maps) throw new Error('未能获得地图信息哦，请稍后重试')
-      for (let i = 0; i < maps.length; i++) {
-        map = maps[i] || {}
-        mod = map.mod || 'UN'
-        stage = map.stage || '未知'
+      const stagePools = await $backend.getPoolBeatmaps(this.poolName)
+      const allMapList = []
+      const allMaps = {}
+      if (!stagePools) throw new Error('未能获得地图信息哦，请稍后重试')
+      for (const stage in stagePools) {
+        const mapList = []
+        const stagePool = stagePools[stage]
+        const maps = {}
+        stagePool.forEach(beatmap => {
+          const detail = beatmap.detail
+          delete (beatmap.detail)
+          beatmap = Object.assign(beatmap, detail)
 
-        if (map.selector) this.getOsuName(map.selector)
+          allMapList.push(beatmap)
+          mapList.push(beatmap)
+          const mod = beatmap.mods.join('')
+          if (!maps[mod]) maps[mod] = [beatmap]
+          else maps[mod].push(beatmap)
 
-        if (!stageSort[stage]) stageSort[stage] = [map]
-        else stageSort[stage].push(map)
-
-        if (!modsSort[mod]) modsSort[mod] = [map]
-        else modsSort[mod].push(map)
+          if (!allMaps[mod]) allMaps[mod] = [beatmap]
+          else allMaps[mod].push(beatmap)
+        })
+        stagePools[stage].maps = maps
+        stagePools[stage].mapList = mapList
       }
-
-      for (const i in stageSort) {
-        stageMaps = stageSort[i] || {}
-        var tempModsSort = {}
-        for (let v = 0; v < stageMaps.length; v++) {
-          map = stageMaps[v] || {}
-          mod = map.mod || 'UN'
-          if (!tempModsSort[mod]) tempModsSort[mod] = [map]
-          else tempModsSort[mod].push(map)
-        }
-        stageSort[i] = { maps: tempModsSort, total: stageMaps.length, mapList: stageMaps }
-      }
-      this.maps = maps
-      stageSort['总览'] = { maps: modsSort, total: maps.length, mapList: maps }
-      this.stageSort = stageSort
-      this.modsSort = modsSort
-      this.currentShowMapSort = modsSort
+      stagePools['总览'] = { mapList: allMapList, maps: allMaps }
+      this.stageSort = stagePools
+      this.currentShowMapSort = stagePools['总览'].maps
+      this.mapsData['总览'] = this.mapDataCalculator(allMapList)
+      this.allMapInitialed = true
     },
     showMsg (icon, title, content) {
       if (icon === 'smile') {

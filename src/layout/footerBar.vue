@@ -31,7 +31,7 @@
         </a>
         powered 2020 ·  <a
           style="color: #A38F98;"
-          href="http://www.beian.miit.gov.cn"
+          href="https://beian.miit.gov.cn"
         >粤ICP备18079952号</a>
       </div>
     </div>

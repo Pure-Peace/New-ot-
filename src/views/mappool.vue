@@ -126,10 +126,10 @@
             >
               <div style="font-size: 13px; position: absolute; right: 20px; top: 15px; background-color: rgba(0, 0, 0, 0.1); padding: 4px 15px; border-radius: 40px;">
                 <span>推荐</span>
-                <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommendElo) }} elo</span>
+                <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommend_elo[0]) }} elo</span>
               </div>
               <a
-                :href="`/poolDetail/${pool.name}`"
+                :href="`/poolDetail/${pool.mappool_name}`"
                 target="_blank"
                 style="font-size: 12px; position: absolute; bottom: 15px; right: 95px; padding: 3px 12px; color: #FAFAFA;"
                 class="my-upload"
@@ -148,12 +148,12 @@
                   <a-avatar
                     class="small-avatar"
                     icon="user"
-                    :src="`https://a.ppy.sh/${pool.creator}?.jpg`"
+                    :src="`https://a.ppy.sh/${pool.host}?.jpg`"
                     style="background-color: #grey; transition: .2s ease-in-out;cursor: pointer;user-select: none;"
-                    @click="openLink(pool.creator)"
+                    @click.stop="openLink(pool.host)"
                   />
                   <div slot="title">
-                    <a :href="`https://osu.ppy.sh/users/${pool.creator}`">访问主页</a>
+                    <a :href="`https://osu.ppy.sh/users/${pool.host}`">访问主页</a>
                   </div>
                 </a-tooltip>
                 <div
@@ -163,15 +163,15 @@
                 </div>
               </div>
               <div style="font-size: 20px;">
-                {{ pool.name }}
+                {{ pool.mappool_name }}
               </div>
               <div style="margin-left: 0; font-size: 12px; margin-top: 6px;">
                 <a-rate
-                  v-model="pool.rating"
+                  v-model="pool.rating.avg"
                   disabled
                   style="font-size: 12px; margin-right: 10px;"
                 />
-                <span>已有{{ pool.ratingCount }}人评分</span>
+                <span>已有{{ pool.rating.counts }}人评分</span>
               </div>
             </div>
           </div>
@@ -197,6 +197,7 @@
       </div>
 
       <div
+        v-if="showing.filter(pool => pool.status !== 'Pending').length > 0"
         style="border-radius: 4px; display: flex; flex-wrap: wrap; padding: 30px 0;"
       >
         <div
@@ -211,7 +212,7 @@
           >
             <div style="font-size: 13px; position: absolute; right: 20px; top: 15px; background-color: rgba(0, 0, 0, 0.1); padding: 4px 15px; border-radius: 40px;">
               <span>推荐</span>
-              <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommendElo) }} elo</span>
+              <span style="margin-left: 5px;">{{ getNumbFormated(pool.recommend_elo[0]) }} elo</span>
             </div>
             <div
               style="font-size: 12px; position: absolute; bottom: 15px; right: 20px; padding: 3px 12px; border-radius: 40px;"
@@ -220,7 +221,7 @@
               {{ pool.status }}
             </div>
             <a
-              :href="`/poolDetail/${pool.name}`"
+              :href="`/poolDetail/${pool.mappool_name}`"
               target="_blank"
               style="font-size: 12px; position: absolute; bottom: 15px; right: 95px; padding: 3px 12px; color: #FAFAFA;"
               class="my-upload"
@@ -233,12 +234,12 @@
                 <a-avatar
                   class="small-avatar"
                   icon="user"
-                  :src="`https://a.ppy.sh/${pool.creator}?.jpg`"
+                  :src="`https://a.ppy.sh/${pool.host}?.jpg`"
                   style="background-color: #grey; transition: .2s ease-in-out;cursor: pointer;user-select: none;"
-                  @click.stop="openLink(pool.creator)"
+                  @click.stop="openLink(pool.host)"
                 />
                 <div slot="title">
-                  <a :href="`https://osu.ppy.sh/users/${pool.creator}`">访问主页</a>
+                  <a :href="`https://osu.ppy.sh/users/${pool.host}`">访问主页</a>
                 </div>
               </a-tooltip>
               <div
@@ -248,15 +249,15 @@
               </div>
             </div>
             <div style="font-size: 20px;">
-              {{ pool.name }}
+              {{ pool.mappool_name }}
             </div>
             <div style="margin-left: 0; font-size: 12px; margin-top: 6px;">
               <a-rate
-                v-model="pool.rating"
+                v-model="pool.rating.avg"
                 disabled
                 style="font-size: 12px; margin-right: 10px;"
               />
-              <span>已有{{ pool.ratingCount }}人评分</span>
+              <span>已有{{ pool.rating.counts }}人评分</span>
             </div>
           </div>
           <div style="margin: -1px 0 0 20px; padding: 15px 20px; background-color: #221C1F; font-weight: lighter; width: 100%; border-radius: 0 0 8px 8px ; border: 1px solid #41393D;">
@@ -271,7 +272,7 @@
                     icon="user"
                     :src="`https://a.ppy.sh/5084172?.jpg`"
                     style="background-color: #grey; transition: .2s ease-in-out;cursor: pointer;user-select: none;"
-                    @click="openLink(pool.creator)"
+                    @click.stop="openLink(pool.host)"
                   />
                   <div slot="title">
                     <a :href="`https://osu.ppy.sh/users/5084172`">访问主页</a>
@@ -286,6 +287,14 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div
+        v-else
+        style="border-radius: 4px; display: flex; flex-wrap: wrap; padding: 30px 0;"
+      >
+        <div style="padding: 20px; margin-left: 20px;">
+          额，还没有推荐的图池。。
         </div>
       </div>
     </div>
@@ -346,7 +355,6 @@
 </template>
 
 <script>
-import { MapPool } from '@/apis/elo-mappool-client'
 import $backend from '@/apis/backend'
 import { mapGetters } from 'vuex'
 
@@ -376,21 +384,17 @@ export default {
   },
   methods: {
     async getPools () {
-      const result = await new MapPool().getPools()
-      var item
-      if (result) {
-        for (let i = 0; i < result.length; i++) {
-          item = result[i]
-          this.uploaders.push(item.creator)
-          this.getOsuName(item.creator)
-        }
-      }
+      const result = await $backend.getMappools()
+      result.forEach(item => {
+        this.uploaders.push(item.host)
+        this.getOsuName(item.host)
+      })
       this.showing = result.slice(0, 8)
       this.pools = result
       this.initing = false
     },
     mappoolDetail (pool) {
-      this.$router.push({ name: 'poolDetail', params: { pool, poolName: pool.name } })
+      this.$router.push({ name: 'poolDetail', params: { pool, poolName: pool.mappool_name } })
     },
     colorGetter (status) {
       const colorData = {
@@ -467,9 +471,9 @@ export default {
         let pool
         for (let i = 0; i < this.pools.length; i++) {
           pool = this.pools[i]
-          if (pool.name.toLowerCase().search(searchKey.toLowerCase()) !== -1) {
+          if (pool.mappool_name.toLowerCase().search(searchKey.toLowerCase()) !== -1) {
             results.push(pool)
-          } else if (pool.creator.toString() === searchKey || pool.submitter.toString() === searchKey) {
+          } else if (pool.host.toString() === searchKey) {
             results.push(pool)
           }
         }
@@ -630,5 +634,25 @@ export default {
 
   a {
     color: #FAFAFA;
+  }
+
+    .my-input {
+    transition: all .6s ease;
+    height: 50px;
+    width: 46%;
+    outline:none;
+    background: rgba(34, 34, 34, 0.1);
+    border: 2px solid rgba(204, 174, 112, 0.8);
+    border-radius: 6px;
+    padding: 10px 45px 10px 10px;
+  }
+  .my-input:hover {
+    border-color: rgba(204, 174, 112, 0.9);
+  }
+  .my-input:focus {
+    border-color: rgb(211, 179, 116);
+  }
+  .my-devider {
+     color: #CCAE70; font-weight:lighter; padding: 0 6px; user-select: none;
   }
 </style>

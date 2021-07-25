@@ -17,7 +17,7 @@ export default {
   },
 
   fetchWiki () {
-    return $axios.get('http://osu.miya.ink/wiki.html')
+    return $axios.get('http://otsu.fun/wiki.html')
       .then(response => response.data)
   },
 
@@ -90,8 +90,16 @@ export default {
     return $axios.get(`${eloApi}/mappool/mplist/${tourneyName}`)
       .then(response => response.data)
   },
-  test1 () {
-    return $axios.get(`${newEloApi}/mappool`)
+  async getMappools () {
+    return $axios.get(`${newEloApi}/mappool?pagination=false&per_page=99999`)
+      .then(response => response.data)
+  },
+  async getPoolBeatmaps (poolName) {
+    return $axios.get(`${newEloApi}/mappool/${poolName}/stage?exclude_detail=false`)
+      .then(response => response.data)
+  },
+  async getPool (poolName) {
+    return $axios.get(`${newEloApi}/mappool/${poolName}`)
       .then(response => response.data)
   },
   getOsuData (osuid, action = 'simple') {

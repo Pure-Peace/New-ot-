@@ -27,7 +27,7 @@
               <span style="font-size: 12px; ">Lastest </span> <span style="font-style: italic; font-size: 16px; ">{{ tValue.lastTime.slice(2, 10) }}</span>
             </div>
             <div
-              :style="tesha[tKey].acronym==='OCLR S3'?'background-image: url(http://otsu.fun/assets/oclrs3.jpg)':''"
+              :style="tesha[tKey].acronym==='OCLR S3'?'background-image: url(http://otsu.fun/public/oclrs3.jpg)':''"
               class="tourney-group-image"
             />
           </div>
