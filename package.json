@@ -14,7 +14,7 @@
     "core-js": "^3.6.5",
     "less": "^3.11.1",
     "less-loader": "4.1.0",
-    "moment": "^2.26.0",
+    "moment": "^2.29.4",
     "node-osu": "^2.2.0",
     "nprogress": "^0.2.0",
     "sass-resources-loader": "^2.0.3",
